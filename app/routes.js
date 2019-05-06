@@ -1,4 +1,5 @@
 const Note = require('./models/note');
+const StickyNote = require('./models/sticky-note');
 
 module.exports = function(app, passport) {
   // normal routes ===============================================================
@@ -9,7 +10,7 @@ module.exports = function(app, passport) {
   });
 
   // PROFILE SECTION =========================
-  app.get('/profile', isLoggedIn, function(req, res) {
+  app.get('/profile', isLoggedIn, async (req, res) => {
     res.render('profile', {
       user: req.user
     });

@@ -57,10 +57,10 @@
 							<button class="delete" aria-label="delete"></button>
 						</div>
 						<div class="message-body">
-							<form method="POST" action="/stickey-note/create" wrap="hard">
-								<input type="hidden" name="version_number" value="1" />
-								<textarea name="input" onchange="save()" class="textarea" placeholder="Enter text..."
-									rows="10"></textarea>
+							<form wrap="hard" id="form">
+
+								<textarea onkeyup="saveStickyNote()" id="input" name="input" class="textarea"
+									placeholder="Enter text..." rows="10"></textarea>
 							</form>
 						</div>
 					</article>
@@ -77,18 +77,60 @@
 <script>
 
 
+
+	let a;
+	const saveStickyNote = async () => {
+		const content = document.querySelector('#input').value
+		console.log(content)
+		clearTimeout(a)
+		a = setTimeout(async () => {
+			console.log('save', content)
+			const stickyNoteObj = { content }
+
+			await axios.post('profile/create-sticky', stickyNoteObj).then(_ => {
+				console.log("new note created")
+			})
+		}, 1000)
+		/*		const stickyNoteObj = { content }
+				console.log(stickyNoteObj)
+		
+				await axios.post('sticky/create', stickyNoteObj).then(_ => {
+					console.log("new note created")
+				}) 
+				*/
+
+
+	}
+
+
 	/*
-		const save = e => {
-			e.target.form['version_number'].value++;
-			const request = new XMLHttpRequest();
-			request.open(e.target.form.method, e.target.form.action);
-			request.send(new FormData(e.target.form));
-		};
-	
-		const input = document.querySelector("#input")
-		input.addEventListener("change", save)
-	
+	const input = document.querySelector("#input")
+	const handleChange = async e => {
+		const { text } = e.target.value
+		console.log({ text })
+		await axios.post("/stickey-note/create", { text })
+	}
+
+	input.onchange = handleChange
+	//const form = document.querySelector("#form")
 	*/
+
+	/*
+	const save = _ => {
+		input.addEventListener("change", async e => {
+			e.preventDefault()
+			const { input } = document.querySelector("#input")
+			console.log(input)
+			await axios.post("/stickey-note/create", { input })
+			console.log("event is triggered")
+		})
+	}
+	setTimeout(save, 1000)
+	*/
+
+
+
+
 
 
 	const x = document.getElementById('sticky-note');
@@ -140,7 +182,6 @@
 					activeItem.initialX = e.touches[0].clientX - activeItem.xOffset;
 					activeItem.initialY = e.touches[0].clientY - activeItem.yOffset;
 				} else {
-					console.log("doing something!");
 					activeItem.initialX = e.clientX - activeItem.xOffset;
 					activeItem.initialY = e.clientY - activeItem.yOffset;
 				}
@@ -149,6 +190,7 @@
 	}
 
 	function dragEnd(e) {
+		//console.log("hello")
 		if (activeItem !== null) {
 			activeItem.initialX = activeItem.currentX;
 			activeItem.initialY = activeItem.currentY;
