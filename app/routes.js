@@ -27,6 +27,18 @@ module.exports = function(app, passport) {
     });
   });
 
+  app.get('/newNote', isLoggedIn, async (req, res) => {
+    res.render('notes/note', {
+      user: req.user
+    });
+  });
+
+  // app.get('/note/create', isLoggedIn, async (req, res) => {
+  //   res.render('notes/note', {
+  //     user: req.user
+  //   });
+  // });
+
   app.get('/getNotes', isLoggedIn, async (req, res) => {
     const allNotes = Note.find({ author: req.session.userId });
     const parsedNotes = await allNotes.exec((err, notes) => {
@@ -36,11 +48,34 @@ module.exports = function(app, passport) {
     res.send(parsedNotes);
   });
 
+  app.get('/currentNote', isLoggedIn, async (req, res) => {
+    const currentNote = Note.findById(req.params.id);
+    res.send(currentNote);
+  });
+
   app.get('/setNote/:id', isLoggedIn, async (req, res) => {
     Note.findById(req.params.id, (err, note) => {
       res.send(note);
     });
   });
+
+  app.get('/deleteNote/:id', isLoggedIn, async (req, res) => {
+    Note.findByIdAndDelete(req.params.id, err => {
+      res.redirect('notes/note');
+    });
+  });
+
+  // app.get('/updateNote/:id', isLoggedIn, async (req, res) => {
+  //   Note.findById(req.params.id),
+  //     (err, note) => {
+  //       res.send(note);
+  //       console.log('this is the note', note);
+  //     };
+  // });
+
+  // app.get('/note/deleteNote', isLoggedIn, async (req, res) => {
+  //   Note.findByIdAndDelete({ _id: req.params.note_id }).then(_ => res.render('notes/note'));
+  // });
 
   // LOGOUT ==============================
   app.get('/logout', function(req, res) {
@@ -48,13 +83,6 @@ module.exports = function(app, passport) {
     res.redirect('/');
   });
 
-  // =============================================================================
-  // AUTHENTICATE (FIRST LOGIN) ==================================================
-  // =============================================================================
-
-  // locally --------------------------------
-  // LOGIN ===============================
-  // show the login form
   app.get('/login', function(req, res) {
     res.render('login', { message: req.flash('loginMessage') });
   });
@@ -69,8 +97,6 @@ module.exports = function(app, passport) {
     })
   );
 
-  // SIGNUP =================================
-  // show the signup form
   app.get('/signup', function(req, res) {
     res.render('signup', { message: req.flash('signupMessage') });
   });

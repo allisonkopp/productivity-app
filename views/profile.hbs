@@ -57,7 +57,11 @@
 							<button class="delete" aria-label="delete"></button>
 						</div>
 						<div class="message-body">
-							<textarea class="textarea" placeholder="Enter text..." rows="10"></textarea>
+							<form method="POST" action="/stickey-note/create" wrap="hard">
+								<input type="hidden" name="version_number" value="1" />
+								<textarea name="input" onchange="save()" class="textarea" placeholder="Enter text..."
+									rows="10"></textarea>
+							</form>
 						</div>
 					</article>
 				</div>
@@ -71,6 +75,21 @@
 
 
 <script>
+
+
+	/*
+		const save = e => {
+			e.target.form['version_number'].value++;
+			const request = new XMLHttpRequest();
+			request.open(e.target.form.method, e.target.form.action);
+			request.send(new FormData(e.target.form));
+		};
+	
+		const input = document.querySelector("#input")
+		input.addEventListener("change", save)
+	
+	*/
+
 
 	const x = document.getElementById('sticky-note');
 	const addStickeyNote = _ => {

@@ -6,22 +6,33 @@ const passport = require('passport');
 const flash = require('connect-flash');
 const path = require('path');
 const noteRoutes = require('./app/router/notes');
-
-// const unirest = require('unirest');
-// const quotes = unirest();
-// console.log(unirest);
-// console.log(quotes);
+const stickyNoteRoutes = require('./app/router/sticky-notes');
 
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const hbs = require('hbs');
 
 var configDB = require('./config/database.js');
 
 const Note = require('./app/models/note');
+const StickyNote = require('./app/models/sticky-note');
 
 mongoose.connect(configDB.url); // connect to our database
+
+//example
+hbs.registerHelper('capitalize', context => {
+  return context.toUpperCase();
+});
+
+hbs.registerHelper('json', context => {
+  return JSON.stringify(context);
+});
+
+hbs.registerHelper('find', context => {
+  return context;
+});
 
 require('./config/passport')(passport); // pass passport for configuration
 
@@ -45,6 +56,7 @@ app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 app.use(express.static('public'));
 app.use('/note', noteRoutes);
+app.use('/sticky-note', stickyNoteRoutes);
 
 // routes ======================================================================
 require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
