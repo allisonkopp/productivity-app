@@ -1,0 +1,166 @@
+<nav class="navbar" role="navigation" aria-label="main navigation">
+	<div id="navbarBasicExample" class="navbar-menu">
+		<div class="navbar-start">
+			<h2>THRIVE</h2>
+		</div>
+		<div class="navbar-end">
+			<div class="navbar-item has-dropdown is-hoverable">
+				<a class="navbar-link">
+					More
+				</a>
+				<div class="navbar-dropdown">
+					<a class="navbar-item" href="/account">
+						Account
+					</a>
+					<a class="navbar-item" href="/logout">
+						Logout
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</nav>
+<div>
+	<div class="columns">
+		<div class="column is-1">
+			<aside class="menu">
+				<ul class="menu-list">
+					<li><a href="/profile"><i class="fas fa-home fa-2x"></i></a></li>
+					<li><a href="/note"><i class="far fa-sticky-note fa-2x"></i></a></li>
+					<li><a><i class="far fa-calendar-alt fa-2x"></i></a></li>
+					<li><a><i class="fas fa-book fa-2x"></i></a></li>
+					<li><a><i class="fas fa-bullseye fa-2x"></i></a></li>
+					<li><a><i class="far fa-bell fa-2x"></i></a></li>
+				</ul>
+			</aside>
+		</div>
+		<div class="column">
+			<div>
+				<button onclick="addStickeyNote()"><a>Add stickey note</a></button>
+				<button><a>Get inspired</a></button>
+				<button><a>Word of the day</a></button>
+			</div>
+
+			<div class="box">
+				<h2>To-Do List</h2>
+				<label class="checkbox">
+					<input type="checkbox">
+					Enter text here
+				</label>
+			</div>
+
+			<div id="container">
+				<div id="sticky-note">
+					<article class="message is-info">
+						<div class="message-header" id="stickey-header">
+							<p>Stickey</p>
+							<button class="delete" aria-label="delete"></button>
+						</div>
+						<div class="message-body">
+							<textarea class="textarea" placeholder="Enter text..." rows="10"></textarea>
+						</div>
+					</article>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+
+</div>
+
+
+<script>
+
+	const x = document.getElementById('sticky-note');
+	const addStickeyNote = _ => {
+		if (x.style.display === 'none') {
+			x.style.display = 'block';
+		} else {
+			x.style.display = 'none';
+		}
+	}
+
+	const locateNode = (currentElement, id) => {
+		const currentId = currentElement.getAttribute("id");
+		if (id === currentId) return currentElement;
+		return locateNode(currentElement.parentNode, id)
+	}
+
+	const container = document.querySelector("#container");
+	let activeItem = null;
+
+	let active = false;
+
+	container.addEventListener("touchstart", dragStart, false);
+	container.addEventListener("touchend", dragEnd, false);
+	container.addEventListener("touchmove", drag, false);
+
+	container.addEventListener("mousedown", dragStart, false);
+	container.addEventListener("mouseup", dragEnd, false);
+	container.addEventListener("mousemove", drag, false);
+
+	function dragStart(e) {
+
+		if (e.target !== e.currentTarget) {
+			active = true;
+
+			// this is the item we are interacting with
+			activeItem = locateNode(e.target, 'sticky-note');
+
+			if (activeItem !== null) {
+				if (!activeItem.xOffset) {
+					activeItem.xOffset = 0;
+				}
+
+				if (!activeItem.yOffset) {
+					activeItem.yOffset = 0;
+				}
+
+				if (e.type === "touchstart") {
+					activeItem.initialX = e.touches[0].clientX - activeItem.xOffset;
+					activeItem.initialY = e.touches[0].clientY - activeItem.yOffset;
+				} else {
+					console.log("doing something!");
+					activeItem.initialX = e.clientX - activeItem.xOffset;
+					activeItem.initialY = e.clientY - activeItem.yOffset;
+				}
+			}
+		}
+	}
+
+	function dragEnd(e) {
+		if (activeItem !== null) {
+			activeItem.initialX = activeItem.currentX;
+			activeItem.initialY = activeItem.currentY;
+		}
+
+		active = false;
+		activeItem = null;
+	}
+
+	function drag(e) {
+		if (active) {
+			if (e.type === "touchmove") {
+				e.preventDefault();
+
+				activeItem.currentX = e.touches[0].clientX - activeItem.initialX;
+				activeItem.currentY = e.touches[0].clientY - activeItem.initialY;
+			} else {
+				activeItem.currentX = e.clientX - activeItem.initialX;
+				activeItem.currentY = e.clientY - activeItem.initialY;
+			}
+
+			activeItem.xOffset = activeItem.currentX;
+			activeItem.yOffset = activeItem.currentY;
+
+			setTranslate(activeItem.currentX, activeItem.currentY, activeItem);
+		}
+	}
+
+	function setTranslate(xPos, yPos, el) {
+		el.style.transform = "translate3d(" + xPos + "px, " + yPos + "px, 0)";
+	}
+
+
+</script>

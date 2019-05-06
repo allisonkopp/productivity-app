@@ -1,0 +1,50 @@
+nav {
+  background-color: white;
+}
+
+.main {
+  background-image: url('https://images.fineartamerica.com/images/artworkimages/mediumlarge/1/blue-watercolor-background-panupong-lithkai.jpg');
+  font-size: 100px;
+  background-size: cover;
+  width: 100%;
+  height: 100vh;
+}
+
+.menu {
+  height: 100vh;
+}
+
+.menu-list a {
+  text-decoration: none;
+  text-align: center;
+}
+
+#sticky-note {
+  width: 20vw;
+  position: absolute;
+  display: none;
+}
+
+#editor {
+  height: 80vh;
+}
+
+.box {
+  width: 20vw;
+}
+
+/* #container {
+  width: 100%;
+  height: 400px;
+  background-color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 7px;
+  touch-action: none;
+} */
+
+/* #menu-list > i {
+  padding-top: 20px;
+} */
