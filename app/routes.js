@@ -1,5 +1,7 @@
 const Note = require('./models/note');
 const StickyNote = require('./models/sticky-note');
+const List = require('./models/list');
+const Reminder = require('./models/reminder');
 
 module.exports = function(app, passport) {
   // normal routes ===============================================================
@@ -10,11 +12,32 @@ module.exports = function(app, passport) {
   });
 
   // PROFILE SECTION =========================
+
   app.get('/profile', isLoggedIn, async (req, res) => {
-    res.render('profile', {
-      user: req.user
-    });
+    List.find({ author: req.session.userId })
+      .then(listItems => {
+        res.render('profile', { listItems });
+      })
+      .catch(err => console.log(err));
   });
+
+  //fix?
+  app.get('/list/delete/:id', (req, res, next) => {
+    List.findByIdAndDelete(req.params.id)
+      .then(res.redirect('/profile'))
+      .catch(error => console.log(error));
+  });
+
+  /*
+  app.get('/getList', isLoggedIn, async (req, res) => {
+    const allListItems = List.find({ author: req.session.userId });
+    const parsedStickies = await allStickies.exec((err, stickies) => {
+      if (err) return;
+      return (stickiesArray = stickies.map(n => n._doc));
+    });
+    res.send(parsedStickies);
+  });
+  */
 
   app.get('/getStickies', isLoggedIn, async (req, res) => {
     const allStickies = StickyNote.find({ author: req.session.userId });
@@ -93,6 +116,10 @@ module.exports = function(app, passport) {
   //   Note.findByIdAndDelete({ _id: req.params.note_id }).then(_ => res.render('notes/note'));
   // });
 
+  app.get('/reminder', isLoggedIn, (req, res) => {
+    res.render('reminder');
+  });
+
   // LOGOUT ==============================
   app.get('/logout', function(req, res) {
     req.logout();
@@ -169,11 +196,6 @@ module.exports = function(app, passport) {
     })
   );
 
-  // =============================================================================
-  // AUTHORIZE (ALREADY LOGGED IN / CONNECTING OTHER SOCIAL ACCOUNT) =============
-  // =============================================================================
-
-  // locally --------------------------------
   app.get('/connect/local', function(req, res) {
     res.render('connect-local', { message: req.flash('loginMessage') });
   });
@@ -227,13 +249,6 @@ module.exports = function(app, passport) {
       failureRedirect: '/'
     })
   );
-
-  // =============================================================================
-  // UNLINK ACCOUNTS =============================================================
-  // =============================================================================
-  // used to unlink accounts. for social accounts, just remove the token
-  // for local account, remove email and password
-  // user account will stay active in case they want to reconnect in the future
 
   // local -----------------------------------
   app.get('/unlink/local', isLoggedIn, function(req, res) {

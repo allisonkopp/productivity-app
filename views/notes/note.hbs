@@ -114,20 +114,15 @@
 
     }
 
-
-
-
     const fetchNotes = async _ => await axios.get('/getNotes')
 
     const showNote = async e => {
-
         const id = e.target.getAttribute('id');
         console.log("this is the id >>>>>>>", id)
         const { data: { title, content } } = await axios.get(`/setNote/${id}`)
         editor.setContents(JSON.parse(content))
         document.querySelector('#title').value = title
     }
-
 
     const foo = fetchNotes().then(({ data }) => {
         const menuList = document.querySelector(".menu-list");

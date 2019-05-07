@@ -5,9 +5,13 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const flash = require('connect-flash');
 const path = require('path');
+
 const noteRoutes = require('./app/router/notes');
 const stickyNoteRoutes = require('./app/router/sticky-notes');
 const listRoutes = require('./app/router/list');
+const reminderRoutes = require('./app/router/reminders');
+
+const scheduler = require('./config/scheduler');
 
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
@@ -19,6 +23,8 @@ var configDB = require('./config/database.js');
 
 const Note = require('./app/models/note');
 const StickyNote = require('./app/models/sticky-note');
+const List = require('./app/models/list');
+const Reminder = require('./app/models/reminder');
 
 mongoose.connect(configDB.url); // connect to our database
 
@@ -59,6 +65,7 @@ app.use(express.static('public'));
 app.use('/note', noteRoutes);
 app.use('/sticky-note', stickyNoteRoutes);
 app.use('/list', listRoutes);
+app.use('/reminder', reminderRoutes);
 
 // routes ======================================================================
 require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
@@ -68,7 +75,3 @@ app.listen(port);
 console.log('The magic happens on port ' + port);
 
 module.exports = app;
-
-// export default Quill;
-
-// module.exports = quotes;

@@ -21,9 +21,6 @@
 	</div>
 </nav>
 
-
-
-
 <div>
 	<div class="columns">
 		<div class="column is-1">
@@ -34,7 +31,7 @@
 					<li><a><i class="far fa-calendar-alt fa-2x"></i></a></li>
 					<li><a><i class="fas fa-book fa-2x"></i></a></li>
 					<li><a><i class="fas fa-bullseye fa-2x"></i></a></li>
-					<li><a><i class="far fa-bell fa-2x"></i></a></li>
+					<li><a href="/reminder"><i class="far fa-bell fa-2x"></i></a></li>
 				</ul>
 			</aside>
 		</div>
@@ -47,13 +44,20 @@
 
 			<div class="box">
 				<h2>To-Do List</h2>
+				<ul id="existing-list">
+					{{#each listItems}}
+					<a href="/list/delete?id={{this._id}}"><i class="far fa-circle"></i></a>
+					{{!-- <input type="checkbox" name="checkbox"> --}}
+					<li>
+						{{item}}
+					</li>
+					{{/each}}
+				</ul>
 				<ul id="list">
 					<li id="plus-icon"><button onclick="addListItem()"><i class="fas fa-plus"></i></button></li>
 				</ul>
 
-				{{!-- <input type="checkbox">
-					Enter text here
-				</label> --}}
+
 			</div>
 
 			<div id="container">
@@ -88,12 +92,11 @@
 		listItem.innerHTML = "this is working"
 		const checkbox = document.createElement("INPUT")
 		checkbox.setAttribute("type", "checkbox")
-		checkbox.setAttribute("value", "done")
+		checkbox.setAttribute("name", "checkbox")
 		const form = document.createElement("form")
 		const input = document.createElement("INPUT")
 		input.setAttribute("type", "text")
 		input.setAttribute("id", "input")
-		//input.addEventListener("click", saveListItem)
 		form.appendChild(checkbox)
 		form.appendChild(input)
 		list.insertBefore(form, plus)
@@ -101,14 +104,33 @@
 
 	}
 
-
-
 	const saveListItem = async _ => {
 		const item = document.querySelector('#input').value
 		await axios.post('list/create-list', { item }).then(_ => {
 			console.log("new list item created")
 		})
 	}
+
+	/*
+	//change this
+	const checkbox = document.querySelector("input[name=checkbox]");
+	checkbox.addEventListener('change', _ => {
+		if (this.checked) {
+			axios.get(`/list/delete?list_id={{{ this._id }}}`)
+			console.log("this is working")
+		}
+	})
+	*/
+
+
+
+
+	//const getList = async _ => await axios.get('/getListItems')
+
+
+
+
+
 
 
 
@@ -177,22 +199,16 @@
 	container.addEventListener("mousemove", drag, false);
 
 	function dragStart(e) {
-
 		if (e.target !== e.currentTarget) {
 			active = true;
-
-			// this is the item we are interacting with
 			activeItem = locateNode(e.target, 'sticky-note');
-
 			if (activeItem !== null) {
 				if (!activeItem.xOffset) {
 					activeItem.xOffset = 0;
 				}
-
 				if (!activeItem.yOffset) {
 					activeItem.yOffset = 0;
 				}
-
 				if (e.type === "touchstart") {
 					activeItem.initialX = e.touches[0].clientX - activeItem.xOffset;
 					activeItem.initialY = e.touches[0].clientY - activeItem.yOffset;
@@ -205,12 +221,10 @@
 	}
 
 	function dragEnd(e) {
-		//console.log("hello")
 		if (activeItem !== null) {
 			activeItem.initialX = activeItem.currentX;
 			activeItem.initialY = activeItem.currentY;
 		}
-
 		active = false;
 		activeItem = null;
 	}
@@ -219,17 +233,14 @@
 		if (active) {
 			if (e.type === "touchmove") {
 				e.preventDefault();
-
 				activeItem.currentX = e.touches[0].clientX - activeItem.initialX;
 				activeItem.currentY = e.touches[0].clientY - activeItem.initialY;
 			} else {
 				activeItem.currentX = e.clientX - activeItem.initialX;
 				activeItem.currentY = e.clientY - activeItem.initialY;
 			}
-
 			activeItem.xOffset = activeItem.currentX;
 			activeItem.yOffset = activeItem.currentY;
-
 			setTranslate(activeItem.currentX, activeItem.currentY, activeItem);
 		}
 	}
