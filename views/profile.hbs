@@ -20,6 +20,10 @@
 		</div>
 	</div>
 </nav>
+
+
+
+
 <div>
 	<div class="columns">
 		<div class="column is-1">
@@ -36,17 +40,20 @@
 		</div>
 		<div class="column">
 			<div>
-				<button onclick="addStickeyNote()"><a>Add stickey note</a></button>
+				<button id="add-sticky" onclick="addStickyNote()"><a>Add stickey note</a></button>
 				<button><a>Get inspired</a></button>
 				<button><a>Word of the day</a></button>
 			</div>
 
 			<div class="box">
 				<h2>To-Do List</h2>
-				<label class="checkbox">
-					<input type="checkbox">
+				<ul id="list">
+					<li id="plus-icon"><button onclick="addListItem()"><i class="fas fa-plus"></i></button></li>
+				</ul>
+
+				{{!-- <input type="checkbox">
 					Enter text here
-				</label>
+				</label> --}}
 			</div>
 
 			<div id="container">
@@ -54,7 +61,7 @@
 					<article class="message is-info">
 						<div class="message-header" id="stickey-header">
 							<p>Stickey</p>
-							<button class="delete" aria-label="delete"></button>
+							<button class="delete" onclick="deleteStickyNote()" aria-label="delete"></button>
 						</div>
 						<div class="message-body">
 							<form wrap="hard" id="form">
@@ -66,80 +73,88 @@
 					</article>
 				</div>
 			</div>
-
 		</div>
-
 	</div>
-
 </div>
+
 
 
 <script>
 
-
-
-	let a;
-	const saveStickyNote = async () => {
-		const content = document.querySelector('#input').value
-		console.log(content)
-		clearTimeout(a)
-		a = setTimeout(async () => {
-			console.log('save', content)
-			const stickyNoteObj = { content }
-
-			await axios.post('profile/create-sticky', stickyNoteObj).then(_ => {
-				console.log("new note created")
-			})
-		}, 1000)
-		/*		const stickyNoteObj = { content }
-				console.log(stickyNoteObj)
-		
-				await axios.post('sticky/create', stickyNoteObj).then(_ => {
-					console.log("new note created")
-				}) 
-				*/
-
+	const addListItem = _ => {
+		const list = document.querySelector('#list')
+		const plus = document.querySelector('#plus-icon')
+		const listItem = document.createElement('li')
+		listItem.innerHTML = "this is working"
+		const checkbox = document.createElement("INPUT")
+		checkbox.setAttribute("type", "checkbox")
+		checkbox.setAttribute("value", "done")
+		const form = document.createElement("form")
+		const input = document.createElement("INPUT")
+		input.setAttribute("type", "text")
+		input.setAttribute("id", "input")
+		//input.addEventListener("click", saveListItem)
+		form.appendChild(checkbox)
+		form.appendChild(input)
+		list.insertBefore(form, plus)
+		plus.addEventListener("click", saveListItem)
 
 	}
 
 
-	/*
-	const input = document.querySelector("#input")
-	const handleChange = async e => {
-		const { text } = e.target.value
-		console.log({ text })
-		await axios.post("/stickey-note/create", { text })
-	}
 
-	input.onchange = handleChange
-	//const form = document.querySelector("#form")
-	*/
-
-	/*
-	const save = _ => {
-		input.addEventListener("change", async e => {
-			e.preventDefault()
-			const { input } = document.querySelector("#input")
-			console.log(input)
-			await axios.post("/stickey-note/create", { input })
-			console.log("event is triggered")
+	const saveListItem = async _ => {
+		const item = document.querySelector('#input').value
+		await axios.post('list/create-list', { item }).then(_ => {
+			console.log("new list item created")
 		})
 	}
-	setTimeout(save, 1000)
-	*/
 
 
 
-
-
-
-	const x = document.getElementById('sticky-note');
-	const addStickeyNote = _ => {
-		if (x.style.display === 'none') {
-			x.style.display = 'block';
-		} else {
-			x.style.display = 'none';
+	//Save sticky note to database
+	const saveStickyNote = async _ => {
+		const content = document.querySelector('#input').value
+		async _ => {
+			const stickyNoteObj = { content }
+			await axios.post('/sticky-note/create-sticky', stickyNoteObj).then(_ => {
+				console.log("new note created")
+			})
 		}
+	}
+
+	const debounce = (fn, delay) => {
+		let timer;
+		return function (...args) {
+			const context = this;
+			timer && clearTimeout(timer);
+			timer = setTimeout(_ => fn.apply(context, args), delay);
+		};
+	}
+	debounce(saveStickyNote(), 1000)
+
+	const getStickyNotes = async _ => {
+		const foo = await axios.get('/getStickies')
+		console.log(foo, "get stickies")
+	}
+
+	let count = 0
+	const addStickyNote = _ => {
+		const addBtn = document.querySelector('#add-sticky')
+		const sticky = document.querySelector('#sticky-note');
+		const container = document.querySelector('#container')
+		count++;
+		if (count === 1) sticky.style.display = "block"
+		if (count > 1) {
+			const stickyClone = container.cloneNode(true)
+			container.appendChild(stickyClone)
+		}
+	}
+
+	//fix this
+	const deleteStickyNote = _ => {
+		const id = document.querySelector("#sticky-note")
+		document.querySelector("#container").removeChild(id)
 	}
 
 	const locateNode = (currentElement, id) => {

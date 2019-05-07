@@ -10,8 +10,6 @@ router.post('/create-sticky', async (req, res, next) => {
     .addAuthor(req.session.userId)
     .save()
     .next();
-
-  // .try(error => console.log(error))
 });
 
 module.exports = router;

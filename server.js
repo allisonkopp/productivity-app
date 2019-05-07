@@ -7,6 +7,7 @@ const flash = require('connect-flash');
 const path = require('path');
 const noteRoutes = require('./app/router/notes');
 const stickyNoteRoutes = require('./app/router/sticky-notes');
+const listRoutes = require('./app/router/list');
 
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
@@ -57,6 +58,7 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 app.use(express.static('public'));
 app.use('/note', noteRoutes);
 app.use('/sticky-note', stickyNoteRoutes);
+app.use('/list', listRoutes);
 
 // routes ======================================================================
 require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport

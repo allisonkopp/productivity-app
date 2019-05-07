@@ -16,6 +16,21 @@ module.exports = function(app, passport) {
     });
   });
 
+  app.get('/getStickies', isLoggedIn, async (req, res) => {
+    const allStickies = StickyNote.find({ author: req.session.userId });
+    const parsedStickies = await allStickies.exec((err, stickies) => {
+      if (err) return;
+      return (stickiesArray = stickies.map(n => n._doc));
+    });
+    res.send(parsedStickies);
+  });
+
+  app.get('/deleteSticky/:id', isLoggedIn, async (req, res) => {
+    StickyNote.findByIdAndDelete(req.params.id, (err, sticky) => {
+      if (sticky) sticky.remove();
+    });
+  });
+
   app.get('/account', isLoggedIn, (req, res) => {
     res.render('account', {
       user: req.user
