@@ -6,7 +6,6 @@ const Reminder = require('./models/reminder');
 module.exports = function(app, passport) {
   // normal routes ===============================================================
 
-  // show the home page (will also have our login links)
   app.get('/', function(req, res) {
     res.render('index');
   });
@@ -98,8 +97,9 @@ module.exports = function(app, passport) {
     });
   });
 
-  app.get('/deleteNote/:id', isLoggedIn, async (req, res) => {
-    Note.findByIdAndDelete(req.params.id, err => {
+  app.get('/deleteNote', isLoggedIn, async (req, res) => {
+    // console.log('req.params are', req.params);
+    Note.findByIdAndDelete(req.params.note_id, err => {
       res.redirect('notes/note');
     });
   });
@@ -293,7 +293,16 @@ module.exports = function(app, passport) {
 };
 
 // route middleware to ensure user is logged in
-function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated()) return next();
+// function isLoggedIn(req, res, next) {
+//   if (req.isAuthenticated()) return next();
+//   res.redirect('/');
+// }
+
+let loggedIn = false;
+const isLoggedIn = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    loggedIn = true;
+    return next();
+  }
   res.redirect('/');
-}
+};

@@ -19,6 +19,37 @@
 </head>
 
 <body>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div id="navbarBasicExample" class="navbar-menu">
+            <div class="navbar-start">
+                <h2>THRIVE</h2>
+            </div>
+            <div class="navbar-end">
+                {{#if loggedIn}}
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <a class="navbar-link">
+                        More
+                    </a>
+                    <div class="navbar-dropdown">
+                        <a class="navbar-item" href="/account">
+                            Account
+                        </a>
+                        <a class="navbar-item" href="/logout">
+                            Logout
+                        </a>
+                    </div>
+                </div>
+                {{else}}
+                <div class="navbar-item">
+                    <div class="buttons">
+                        <a class="button is-primary" href="/login"><span class="fa fa-user"></span>Login</a>
+                        <a class="button is-light" href="/signup"><span class="fa fa-user"></span> Signup</a>
+                    </div>
+                </div>
+                {{/if}}
+            </div>
+        </div>
+    </nav>
 
     {{{body}}}
 

@@ -1,26 +1,3 @@
-<nav class="navbar" role="navigation" aria-label="main navigation">
-	<div id="navbarBasicExample" class="navbar-menu">
-		<div class="navbar-start">
-			<h2>THRIVE</h2>
-		</div>
-		<div class="navbar-end">
-			<div class="navbar-item has-dropdown is-hoverable">
-				<a class="navbar-link">
-					More
-				</a>
-				<div class="navbar-dropdown">
-					<a class="navbar-item" href="/account">
-						Account
-					</a>
-					<a class="navbar-item" href="/logout">
-						Logout
-					</a>
-				</div>
-			</div>
-		</div>
-	</div>
-</nav>
-
 <div>
 	<div class="columns">
 		<div class="column is-1">
@@ -37,7 +14,7 @@
 		</div>
 		<div class="column">
 			<div>
-				<button id="add-sticky" onclick="addStickyNote()"><a>Add stickey note</a></button>
+				<button id="add-sticky" onclick="createStickyNote()"><a>Add stickey note</a></button>
 				<button><a>Get inspired</a></button>
 				<button><a>Word of the day</a></button>
 			</div>
@@ -59,195 +36,204 @@
 
 
 			</div>
+			<div id="sticky-main">
 
-			<div id="container">
-				<div id="sticky-note">
-					<article class="message is-info">
-						<div class="message-header" id="stickey-header">
-							<p>Stickey</p>
-							<button class="delete" onclick="deleteStickyNote()" aria-label="delete"></button>
-						</div>
-						<div class="message-body">
-							<form wrap="hard" id="form">
 
-								<textarea onkeyup="saveStickyNote()" id="input" name="input" class="textarea"
-									placeholder="Enter text..." rows="10"></textarea>
-							</form>
-						</div>
-					</article>
-				</div>
+
 			</div>
 		</div>
 	</div>
-</div>
 
 
 
-<script>
+	<script>
 
-	const addListItem = _ => {
-		const list = document.querySelector('#list')
-		const plus = document.querySelector('#plus-icon')
-		const listItem = document.createElement('li')
-		listItem.innerHTML = "this is working"
-		const checkbox = document.createElement("INPUT")
-		checkbox.setAttribute("type", "checkbox")
-		checkbox.setAttribute("name", "checkbox")
-		const form = document.createElement("form")
-		const input = document.createElement("INPUT")
-		input.setAttribute("type", "text")
-		input.setAttribute("id", "input")
-		form.appendChild(checkbox)
-		form.appendChild(input)
-		list.insertBefore(form, plus)
-		plus.addEventListener("click", saveListItem)
-
-	}
-
-	const saveListItem = async _ => {
-		const item = document.querySelector('#input').value
-		await axios.post('list/create-list', { item }).then(_ => {
-			console.log("new list item created")
-		})
-	}
-
-	/*
-	//change this
-	const checkbox = document.querySelector("input[name=checkbox]");
-	checkbox.addEventListener('change', _ => {
-		if (this.checked) {
-			axios.get(`/list/delete?list_id={{{ this._id }}}`)
-			console.log("this is working")
+		const addListItem = _ => {
+			const list = document.querySelector('#list')
+			const plus = document.querySelector('#plus-icon')
+			const listItem = document.createElement('li')
+			listItem.innerHTML = "this is working"
+			const checkbox = document.createElement("input")
+			checkbox.setAttribute("type", "checkbox")
+			//checkbox.setAttribute("name", "checkbox")
+			const form = document.createElement("form")
+			const input = document.createElement("INPUT")
+			input.setAttribute("type", "text")
+			input.setAttribute("id", "input")
+			form.appendChild(checkbox)
+			form.appendChild(input)
+			list.insertBefore(form, plus)
+			console.log(list)
+			plus.addEventListener("click", saveListItem)
 		}
-	})
-	*/
 
-
-
-
-	//const getList = async _ => await axios.get('/getListItems')
-
-
-
-
-
-
-
-
-	//Save sticky note to database
-	const saveStickyNote = async _ => {
-		const content = document.querySelector('#input').value
-		async _ => {
-			const stickyNoteObj = { content }
-			await axios.post('/sticky-note/create-sticky', stickyNoteObj).then(_ => {
-				console.log("new note created")
+		const saveListItem = async _ => {
+			const item = document.querySelector('#input').value
+			await axios.post('list/create-list', { item }).then(_ => {
+				console.log("new list item created")
 			})
 		}
-	}
 
-	const debounce = (fn, delay) => {
-		let timer;
-		return function (...args) {
-			const context = this;
-			timer && clearTimeout(timer);
-			timer = setTimeout(_ => fn.apply(context, args), delay);
-		};
-	}
-	debounce(saveStickyNote(), 1000)
 
-	const getStickyNotes = async _ => {
-		const foo = await axios.get('/getStickies')
-		console.log(foo, "get stickies")
-	}
+		const createStickyNote = _ => {
+			const stickyContainer = document.querySelector('#sticky-main')
+			const stickyContent = [createStickyContainer(), createStickyHeader(), createStickyBody()]
+			stickyContent.forEach(node => stickyContainer.appendChild(node))
+			console.log(stickyContent)
 
-	let count = 0
-	const addStickyNote = _ => {
-		const addBtn = document.querySelector('#add-sticky')
-		const sticky = document.querySelector('#sticky-note');
-		const container = document.querySelector('#container')
-		count++;
-		if (count === 1) sticky.style.display = "block"
-		if (count > 1) {
-			const stickyClone = container.cloneNode(true)
-			container.appendChild(stickyClone)
 		}
-	}
 
-	//fix this
-	const deleteStickyNote = _ => {
-		const id = document.querySelector("#sticky-note")
-		document.querySelector("#container").removeChild(id)
-	}
+		const createStickyContainer = _ => {
+			const container = document.createElement('div')
+			container.setAttribute('class', 'container')
+			const sticky = document.createElement('div')
+			sticky.setAttribute('class', 'sticky-note')
+			const article = document.createElement('article')
+			article.setAttribute('class', 'message is-info')
+			container.appendChild(sticky)
+			container.appendChild(article)
+			return container
+		}
 
-	const locateNode = (currentElement, id) => {
-		const currentId = currentElement.getAttribute("id");
-		if (id === currentId) return currentElement;
-		return locateNode(currentElement.parentNode, id)
-	}
+		const createStickyHeader = _ => {
+			const header = document.createElement('div')
+			header.setAttribute('class', 'message-header')
+			header.setAttribute('class', 'stickey-header')
+			const button = document.createElement('button')
+			button.setAttribute('class', 'delete')
+			button.setAttribute('onclick', 'deleteStickyNote()')
+			button.setAttribute('aria-label', 'delete')
+			header.appendChild(button)
+			return header
+		}
 
-	const container = document.querySelector("#container");
-	let activeItem = null;
+		const createStickyBody = _ => {
+			const body = document.createElement('div')
+			body.setAttribute('class', 'message-body')
+			const form = document.createElement('form')
+			form.setAttribute('wrap', 'hard')
+			form.setAttribute('class', 'form')
+			const textArea = document.createElement('textArea')
+			//textArea.setAttribute('onkeyup', 'saveStickyNote()')
+			textArea.setAttribute('class', 'input')
+			textArea.setAttribute('class', 'textarea')
+			textArea.setAttribute('placeholder', 'Enter text...')
+			textArea.setAttribute('rows', '10')
+			body.appendChild(form)
+			body.appendChild(textArea)
+			return body
+		}
 
-	let active = false;
 
-	container.addEventListener("touchstart", dragStart, false);
-	container.addEventListener("touchend", dragEnd, false);
-	container.addEventListener("touchmove", drag, false);
+		/*
+		//Save sticky note to database
+		const saveStickyNote = async _ => {
+			const content = document.querySelector('.input').value //will this work
+			async _ => {
+				const stickyNoteObj = { content }
+				await axios.post('/sticky-note/create-sticky', stickyNoteObj).then(_ => {
+					console.log("new note created")
+				})
+			}
+		}
+		*/
 
-	container.addEventListener("mousedown", dragStart, false);
-	container.addEventListener("mouseup", dragEnd, false);
-	container.addEventListener("mousemove", drag, false);
+		const debounce = (fn, delay) => {
+			let timer;
+			return function (...args) {
+				const context = this;
+				timer && clearTimeout(timer);
+				timer = setTimeout(_ => fn.apply(context, args), delay);
+			};
+		}
+		//debounce(saveStickyNote(), 1000)
 
-	function dragStart(e) {
-		if (e.target !== e.currentTarget) {
-			active = true;
-			activeItem = locateNode(e.target, 'sticky-note');
+		const getStickyNotes = async _ => {
+			const foo = await axios.get('/getStickies')
+			console.log(foo, "get stickies")
+		}
+
+
+
+		//fix this
+
+		const deleteStickyNote = _ => {
+			const id = document.querySelector(".sticky-note")
+			document.querySelector("#container").removeChild(id)
+		}
+
+
+
+		//will this work with classes?
+		const locateNode = (currentElement, id) => {
+			const currentId = currentElement.getAttribute("id");
+			if (id === currentId) return currentElement;
+			return locateNode(currentElement.parentNode, id)
+		}
+
+		const container = document.querySelector("#container");
+		let activeItem = null;
+
+		let active = false;
+
+		container.addEventListener("touchstart", dragStart, false);
+		container.addEventListener("touchend", dragEnd, false);
+		container.addEventListener("touchmove", drag, false);
+
+		container.addEventListener("mousedown", dragStart, false);
+		container.addEventListener("mouseup", dragEnd, false);
+		container.addEventListener("mousemove", drag, false);
+
+		function dragStart(e) {
+			if (e.target !== e.currentTarget) {
+				active = true;
+				activeItem = locateNode(e.target, 'sticky-note');
+				if (activeItem !== null) {
+					if (!activeItem.xOffset) {
+						activeItem.xOffset = 0;
+					}
+					if (!activeItem.yOffset) {
+						activeItem.yOffset = 0;
+					}
+					if (e.type === "touchstart") {
+						activeItem.initialX = e.touches[0].clientX - activeItem.xOffset;
+						activeItem.initialY = e.touches[0].clientY - activeItem.yOffset;
+					} else {
+						activeItem.initialX = e.clientX - activeItem.xOffset;
+						activeItem.initialY = e.clientY - activeItem.yOffset;
+					}
+				}
+			}
+		}
+
+		function dragEnd(e) {
 			if (activeItem !== null) {
-				if (!activeItem.xOffset) {
-					activeItem.xOffset = 0;
-				}
-				if (!activeItem.yOffset) {
-					activeItem.yOffset = 0;
-				}
-				if (e.type === "touchstart") {
-					activeItem.initialX = e.touches[0].clientX - activeItem.xOffset;
-					activeItem.initialY = e.touches[0].clientY - activeItem.yOffset;
+				activeItem.initialX = activeItem.currentX;
+				activeItem.initialY = activeItem.currentY;
+			}
+			active = false;
+			activeItem = null;
+		}
+
+		function drag(e) {
+			if (active) {
+				if (e.type === "touchmove") {
+					e.preventDefault();
+					activeItem.currentX = e.touches[0].clientX - activeItem.initialX;
+					activeItem.currentY = e.touches[0].clientY - activeItem.initialY;
 				} else {
-					activeItem.initialX = e.clientX - activeItem.xOffset;
-					activeItem.initialY = e.clientY - activeItem.yOffset;
+					activeItem.currentX = e.clientX - activeItem.initialX;
+					activeItem.currentY = e.clientY - activeItem.initialY;
 				}
+				activeItem.xOffset = activeItem.currentX;
+				activeItem.yOffset = activeItem.currentY;
+				setTranslate(activeItem.currentX, activeItem.currentY, activeItem);
 			}
 		}
-	}
 
-	function dragEnd(e) {
-		if (activeItem !== null) {
-			activeItem.initialX = activeItem.currentX;
-			activeItem.initialY = activeItem.currentY;
+		function setTranslate(xPos, yPos, el) {
+			el.style.transform = "translate3d(" + xPos + "px, " + yPos + "px, 0)";
 		}
-		active = false;
-		activeItem = null;
-	}
-
-	function drag(e) {
-		if (active) {
-			if (e.type === "touchmove") {
-				e.preventDefault();
-				activeItem.currentX = e.touches[0].clientX - activeItem.initialX;
-				activeItem.currentY = e.touches[0].clientY - activeItem.initialY;
-			} else {
-				activeItem.currentX = e.clientX - activeItem.initialX;
-				activeItem.currentY = e.clientY - activeItem.initialY;
-			}
-			activeItem.xOffset = activeItem.currentX;
-			activeItem.yOffset = activeItem.currentY;
-			setTranslate(activeItem.currentX, activeItem.currentY, activeItem);
-		}
-	}
-
-	function setTranslate(xPos, yPos, el) {
-		el.style.transform = "translate3d(" + xPos + "px, " + yPos + "px, 0)";
-	}
 
 
-</script>
+	</script>

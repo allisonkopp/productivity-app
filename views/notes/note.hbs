@@ -46,8 +46,7 @@
         <div>
             <div id="editor">
                 {{editor}}
-                {{!-- <p>Good world!</p>
-                <p>Sgrehre <strong>bold</strong> text</p> --}}
+
                 <p><br></p>
 
             </div>
@@ -137,10 +136,10 @@
     })
 
 
-    const deleteNote = async id => {
-        const currentNote = document.getElementById(`#${id}`)
+    const deleteNote = async _ => {
+        console.log("this is working")
 
-
+        await axios.delete('/deleteNote/_id')
 
     }
 
