@@ -14,9 +14,12 @@ module.exports = function(app, passport) {
 
   app.get('/profile', isLoggedIn, async (req, res) => {
     app.locals.user = req.session.userId;
-    List.find({ author: req.session.userId })
-      .then(listItems => {
-        res.render('profile', { listItems });
+    List.find({ author: req.session.userId }).then(listItems => {
+      res.render('profile', { listItems });
+    });
+    StickyNote.find({ author: req.session.userId })
+      .then(items => {
+        res.render('profile', { items });
       })
       .catch(err => console.log(err));
   });

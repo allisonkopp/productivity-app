@@ -1,0 +1,16 @@
+<div class="sticky-note">
+   <article class="message is-info">
+    <div class="message-header" class="stickey-header">
+        <button class="delete" onclick="deleteStickyNote()" aria-label="delete"></button>
+    </div>
+    <div class="message-body">
+      <form wrap="hard" class="form">
+          <textarea onkeyup="saveStickyNote()" class="input" name="input" class="textarea" rows="10">
+            {{this.content}}
+          </textarea>
+      </form>           
+    </div>        
+  </article>
+</div>
+       
+   

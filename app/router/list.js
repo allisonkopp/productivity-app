@@ -20,4 +20,18 @@ router.get('/getList', async (req, res) => {
   res.send(parsedListItems);
 });
 
+//also fix this
+router.post('/updateList/:id', async (req, res, next) => {
+  const id = req.params.id;
+  const listData = req.body;
+  try {
+    const data = await List.findByIdAndUpdate(id, listData);
+    console.log('update note success', data);
+    res.send('success');
+    next();
+  } catch (e) {
+    res.send('update list error', e);
+  }
+});
+
 module.exports = router;

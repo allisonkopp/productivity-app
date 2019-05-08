@@ -37,10 +37,6 @@ hbs.registerHelper('json', context => {
   return JSON.stringify(context);
 });
 
-hbs.registerHelper('find', context => {
-  return context;
-});
-
 require('./config/passport')(passport); // pass passport for configuration
 
 app.use(morgan('dev')); // log every request to the console
@@ -49,6 +45,8 @@ app.use(bodyParser.json()); // get information from html forms
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.set('view engine', 'hbs');
+
+hbs.registerPartials(__dirname + '/views/partials');
 
 // required for passport
 app.use(

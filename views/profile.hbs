@@ -31,18 +31,21 @@
 				<button onclick="addListItem()"><i class="fas fa-plus"></i></button>
 			</div>
 
-			<button onclick="fetchList()">TEST ME</button>
+			<button onclick="getStickyNotes()">TEST ME</button>
+
+
+
+
 
 
 			<div id="container">
+				 {{#each items}}
+				{{> stickyPartial}}
+				{{/each}} 
 
-				      
 			</div>
 		</div>
 	</div>
-
-
-
 
 	<script>
 
@@ -54,35 +57,59 @@
 		}
 
 		const createListItem = _ => {
-			//const listItem = document.createElement('li')
-			//const listForm = document.createElement('form')
-			const checkbox = document.createElement('i')
-			checkbox.setAttribute('class', 'far fa-circle')
 			const listInput = document.createElement('input')
 			listInput.setAttribute('type', 'text')
 			listInput.setAttribute('class', 'list-input')
-			const listItem = listInput.value
-			axios.post('/list/create', { item: listItem })
-				.then(_ => console.log("new list item created"))
-			return [checkbox, listInput]
+			return listInput
 		}
+
+		const createCheckBox = _ => {
+			const checkbox = document.createElement('i')
+			checkbox.setAttribute('class', 'far fa-circle')
+			return checkbox
+		}
+
+		const saveListItem = _ => {
+			const listItem = createListItem()
+			const listInput = listItem.value
+
+			axios.post('/list/create', { item: listInput })
+				.then(_ => console.log("new list item created"))
+
+
+		}
+
+
+
+		/*
+		const updateListItem = _ => {
+			const listInput = createListItem().value
+			fetchList().forEach(item => {
+				axios.post(`/list/updateList/#${item._id}`, listInput)
+			})
+		}
+		*/
+
 
 
 
 		const addListItem = _ => {
 			const listContainer = document.querySelector('#list-container')
-			const listElements = createListItem()
+			const listElements = [createCheckBox(), createListItem()]
 			const list = createListWrapper()
 			listElements.forEach(node => {
 				list.appendChild(node)
+				saveListItem()   //not working
 			})
 			listContainer.appendChild(list)
-			console.log("the button has been clicked")
+			//list.addEventListener('blur', saveListItem)
 		}
 
 		const fetchList = async _ => {
+			//const listContainer = document.querySelector('#list-container')
 			const { data } = await axios.get('/list/getList')
-			console.log(data)
+			data.forEach(item => console.log(item._id))
+			return data
 		}
 
 		/*
@@ -157,42 +184,25 @@
 			const stickyContent = [createStickyHeader(), createStickyBody()]
 			stickyContent.forEach(node => stickyNote.appendChild(node))
 			stickyContainer.appendChild(stickyNote);
-			axios.post('/sticky-notes/create-sticky', { content: 'create me' })
+			axios.post('/sticky/create', { content: 'create me' })
+
 		}
 
-
-
-
-		/*
-		//Save sticky note to database
-		const saveStickyNote = async _ => {
-			const content = document.querySelector('.input').value //will this work
-			async _ => {
-				const stickyNoteObj = { content }
-				await axios.post('/sticky-note/create-sticky', stickyNoteObj).then(_ => {
-					console.log("new note created")
-				})
-			}
-		}
-		*/
 
 		const getStickyNotes = async _ => {
-			const foo = await axios.get('/getStickies')
-			console.log(foo, "get stickies")
-		}
+			//const stickyText = document.querySelector('#textarea')
 
-
-
-		//fix this
-
-		const deleteStickyNote = _ => {
-			const id = document.querySelector("#sticky-note")
+			//stickyContainer.innerHTML = String()
+			const { data } = await axios.get('/getStickies')
+			console.log(data)
 
 		}
 
 
 
-		//will this work with classes?
+
+
+
 
 		const container = document.querySelector("#container");
 		let activeItem = null;
