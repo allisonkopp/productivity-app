@@ -1,13 +1,24 @@
 nav {
   background-color: white;
+  height: 10vh;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+#navbarBasicExample > div.navbar-start > h2 {
+  font-size: 4vh;
+  font-weight: 700;
 }
 
 .main {
-  background-image: url('https://images.fineartamerica.com/images/artworkimages/mediumlarge/1/blue-watercolor-background-panupong-lithkai.jpg');
-  font-size: 100px;
+  background-image: url('https://pilbox.themuse.com/image.jpg?url=https%3A%2F%2Fassets.themuse.com%2Fuploaded%2Fattachments%2F17954.jpg%3Fv%3D940099b9b79be5183457207d95b446e25bf98053a4cd7bf65706dc543c19823a&h=367&prog=1');
+  font-size: 80px;
   background-size: cover;
   width: 100%;
-  height: 100vh;
+  height: 80vh;
 }
 
 .menu {
@@ -47,3 +58,7 @@ nav {
 /* #menu-list > i {
   padding-top: 20px;
 } */
+
+form {
+  display: inline;
+}

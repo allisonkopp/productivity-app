@@ -21,58 +21,97 @@
 
 			<div class="box">
 				<h2>To-Do List</h2>
-				<ul id="existing-list">
+				<ul id="list-container">
 					{{#each listItems}}
-					<a href="/list/delete?id={{this._id}}"><i class="far fa-circle"></i></a>
-					{{!-- <input type="checkbox" name="checkbox"> --}}
 					<li>
-						{{item}}
+						<form><i class="far fa-circle"></i>{{item}}</form>
 					</li>
 					{{/each}}
 				</ul>
-				<ul id="list">
-					<li id="plus-icon"><button onclick="addListItem()"><i class="fas fa-plus"></i></button></li>
-				</ul>
-
-
+				<button onclick="addListItem()"><i class="fas fa-plus"></i></button>
 			</div>
+
+			<button onclick="fetchList()">TEST ME</button>
+
+
 			<div id="container">
 
 				      
-
-
-
 			</div>
 		</div>
 	</div>
 
 
 
+
 	<script>
 
-		const addListItem = _ => {
-			const list = document.querySelector('#list')
-			const plus = document.querySelector('#plus-icon')
-			const listItem = document.createElement('li')
-			listItem.innerHTML = "this is working"
-			const checkbox = document.createElement("input")
-			checkbox.setAttribute("type", "checkbox")
-			//checkbox.setAttribute("name", "checkbox")
-			const form = document.createElement("form")
-			const input = document.createElement("input")
-			input.setAttribute("type", "text")
-			input.setAttribute("id", "input")
-			form.appendChild(checkbox)
-			form.appendChild(input)
-			list.insertBefore(form, plus)
-			console.log(list)
-			plus.addEventListener("click", saveListItem)
+		const createListWrapper = _ => {
+			const list = document.createElement('li')
+			const listForm = document.createElement('form')
+			list.appendChild(listForm)
+			return list
 		}
 
-		const saveListItem = async _ => {
-			const item = document.querySelector('#input').value
-			await axios.post('list/create-list', { item }).then(_ => console.log("new list item created"))
+		const createListItem = _ => {
+			//const listItem = document.createElement('li')
+			//const listForm = document.createElement('form')
+			const checkbox = document.createElement('i')
+			checkbox.setAttribute('class', 'far fa-circle')
+			const listInput = document.createElement('input')
+			listInput.setAttribute('type', 'text')
+			listInput.setAttribute('class', 'list-input')
+			const listItem = listInput.value
+			axios.post('/list/create', { item: listItem })
+				.then(_ => console.log("new list item created"))
+			return [checkbox, listInput]
 		}
+
+
+
+		const addListItem = _ => {
+			const listContainer = document.querySelector('#list-container')
+			const listElements = createListItem()
+			const list = createListWrapper()
+			listElements.forEach(node => {
+				list.appendChild(node)
+			})
+			listContainer.appendChild(list)
+			console.log("the button has been clicked")
+		}
+
+		const fetchList = async _ => {
+			const { data } = await axios.get('/list/getList')
+			console.log(data)
+		}
+
+		/*
+			const fetchNotes = async _ => {
+					const { data } = await axios.get('/note/getNotes')
+					const menuList = document.querySelector(".menu-list");
+					menuList.innerHTML = String();
+					data.forEach(note => {
+						const listItem = document.createElement('li')
+						listItem.setAttribute('id', note._id)
+						listItem.innerHTML = note.title
+						listItem.addEventListener('click', showNote)
+						menuList.appendChild(listItem)
+					})
+					return data
+					*/
+
+		/*
+			const saveListItem = async _ => {
+				const listItem = document.querySelector('.list-input').value
+				console.log(listItem)
+				await axios.post('/list/create', { item: listItem }).then(_ => console.log("new list item created"))
+			}
+			*/
+
+
+
+
+
 
 		const createStickyWrapper = _ => {
 			const sticky = document.createElement('div')
@@ -119,8 +158,9 @@
 			stickyContent.forEach(node => stickyNote.appendChild(node))
 			stickyContainer.appendChild(stickyNote);
 			axios.post('/sticky-notes/create-sticky', { content: 'create me' })
-
 		}
+
+
 
 
 		/*

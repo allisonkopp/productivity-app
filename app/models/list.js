@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const ListSchema = new Schema({
   item: {
     type: String,
-    required: true
+    required: false
   },
   author: {
     type: mongoose.Schema.Types.ObjectId,
