@@ -19,10 +19,9 @@ nav {
   text-align: center;
 }
 
-#sticky-note {
+.sticky-note {
   width: 25vw;
   position: absolute;
-  display: none;
 }
 
 #editor {

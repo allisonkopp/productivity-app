@@ -36,7 +36,9 @@
 
 
 			</div>
-			<div id="sticky-main">
+			<div id="container">
+
+				      
 
 
 
@@ -57,7 +59,7 @@
 			checkbox.setAttribute("type", "checkbox")
 			//checkbox.setAttribute("name", "checkbox")
 			const form = document.createElement("form")
-			const input = document.createElement("INPUT")
+			const input = document.createElement("input")
 			input.setAttribute("type", "text")
 			input.setAttribute("id", "input")
 			form.appendChild(checkbox)
@@ -69,30 +71,16 @@
 
 		const saveListItem = async _ => {
 			const item = document.querySelector('#input').value
-			await axios.post('list/create-list', { item }).then(_ => {
-				console.log("new list item created")
-			})
+			await axios.post('list/create-list', { item }).then(_ => console.log("new list item created"))
 		}
 
-
-		const createStickyNote = _ => {
-			const stickyContainer = document.querySelector('#sticky-main')
-			const stickyContent = [createStickyContainer(), createStickyHeader(), createStickyBody()]
-			stickyContent.forEach(node => stickyContainer.appendChild(node))
-			console.log(stickyContent)
-
-		}
-
-		const createStickyContainer = _ => {
-			const container = document.createElement('div')
-			container.setAttribute('class', 'container')
+		const createStickyWrapper = _ => {
 			const sticky = document.createElement('div')
 			sticky.setAttribute('class', 'sticky-note')
 			const article = document.createElement('article')
 			article.setAttribute('class', 'message is-info')
-			container.appendChild(sticky)
-			container.appendChild(article)
-			return container
+			sticky.appendChild(article);
+			return sticky
 		}
 
 		const createStickyHeader = _ => {
@@ -124,6 +112,16 @@
 			return body
 		}
 
+		const createStickyNote = _ => {
+			const stickyContainer = document.querySelector('#container')
+			const stickyNote = createStickyWrapper()
+			const stickyContent = [createStickyHeader(), createStickyBody()]
+			stickyContent.forEach(node => stickyNote.appendChild(node))
+			stickyContainer.appendChild(stickyNote);
+			axios.post('/sticky-notes/create-sticky', { content: 'create me' })
+
+		}
+
 
 		/*
 		//Save sticky note to database
@@ -138,16 +136,6 @@
 		}
 		*/
 
-		const debounce = (fn, delay) => {
-			let timer;
-			return function (...args) {
-				const context = this;
-				timer && clearTimeout(timer);
-				timer = setTimeout(_ => fn.apply(context, args), delay);
-			};
-		}
-		//debounce(saveStickyNote(), 1000)
-
 		const getStickyNotes = async _ => {
 			const foo = await axios.get('/getStickies')
 			console.log(foo, "get stickies")
@@ -158,18 +146,13 @@
 		//fix this
 
 		const deleteStickyNote = _ => {
-			const id = document.querySelector(".sticky-note")
-			document.querySelector("#container").removeChild(id)
+			const id = document.querySelector("#sticky-note")
+
 		}
 
 
 
 		//will this work with classes?
-		const locateNode = (currentElement, id) => {
-			const currentId = currentElement.getAttribute("id");
-			if (id === currentId) return currentElement;
-			return locateNode(currentElement.parentNode, id)
-		}
 
 		const container = document.querySelector("#container");
 		let activeItem = null;

@@ -13,6 +13,7 @@ module.exports = function(app, passport) {
   // PROFILE SECTION =========================
 
   app.get('/profile', isLoggedIn, async (req, res) => {
+    app.locals.user = req.session.userId;
     List.find({ author: req.session.userId })
       .then(listItems => {
         res.render('profile', { listItems });
@@ -49,7 +50,7 @@ module.exports = function(app, passport) {
 
   app.get('/deleteSticky/:id', isLoggedIn, async (req, res) => {
     StickyNote.findByIdAndDelete(req.params.id, (err, sticky) => {
-      if (sticky) sticky.remove();
+      sticky.remove();
     });
   });
 
@@ -71,51 +72,6 @@ module.exports = function(app, passport) {
     });
   });
 
-  // app.get('/note/create', isLoggedIn, async (req, res) => {
-  //   res.render('notes/note', {
-  //     user: req.user
-  //   });
-  // });
-
-  app.get('/getNotes', isLoggedIn, async (req, res) => {
-    const allNotes = Note.find({ author: req.session.userId });
-    const parsedNotes = await allNotes.exec((err, notes) => {
-      if (err) return;
-      return (notesArray = notes.map(n => n._doc));
-    });
-    res.send(parsedNotes);
-  });
-
-  app.get('/currentNote', isLoggedIn, async (req, res) => {
-    const currentNote = Note.findById(req.params.id);
-    res.send(currentNote);
-  });
-
-  app.get('/setNote/:id', isLoggedIn, async (req, res) => {
-    Note.findById(req.params.id, (err, note) => {
-      res.send(note);
-    });
-  });
-
-  app.get('/deleteNote', isLoggedIn, async (req, res) => {
-    // console.log('req.params are', req.params);
-    Note.findByIdAndDelete(req.params.note_id, err => {
-      res.redirect('notes/note');
-    });
-  });
-
-  // app.get('/updateNote/:id', isLoggedIn, async (req, res) => {
-  //   Note.findById(req.params.id),
-  //     (err, note) => {
-  //       res.send(note);
-  //       console.log('this is the note', note);
-  //     };
-  // });
-
-  // app.get('/note/deleteNote', isLoggedIn, async (req, res) => {
-  //   Note.findByIdAndDelete({ _id: req.params.note_id }).then(_ => res.render('notes/note'));
-  // });
-
   app.get('/reminder', isLoggedIn, (req, res) => {
     res.render('reminder');
   });
@@ -123,6 +79,7 @@ module.exports = function(app, passport) {
   // LOGOUT ==============================
   app.get('/logout', function(req, res) {
     req.logout();
+    app.locals.user = null;
     res.redirect('/');
   });
 

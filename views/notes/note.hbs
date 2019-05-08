@@ -1,61 +1,37 @@
-<nav class="navbar" role="navigation" aria-label="main navigation">
-    <div id="navbarBasicExample" class="navbar-menu">
-        <div class="navbar-start">
-            <h2>logo here</h2>
-        </div>
-        <div class="navbar-end">
-            <div class="navbar-item has-dropdown is-hoverable">
-                <a class="navbar-link">
-                    More
-                </a>
-                <div class="navbar-dropdown">
-                    <a class="navbar-item" href="/account">
-                        Account
-                    </a>
-                    <a class="navbar-item" href="/logout">
-                        Logout
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</nav>
-
 <input type="hidden" id="hidden" value={{notes}} />
 
-
 <div class="columns">
-    <div class="column is-one-fifth">
-        <aside class="menu">
-            <p class="menu-label">
-                Notes
-            </p>
-            <ul class="menu-list">
-                <li><a>New Note</a></li>
-            </ul>
-            <button onclick="newNote()"><i class="fas fa-plus" id="add"></i></button>
+  <div class="column is-one-fifth">
+    <aside class="menu">
+      <p class="menu-label">
+        Notes
+      </p>
+      <ul class="menu-list">
+        <li><a>New Note</a></li>
+      </ul>
+      <button onclick="newNote()"><i class="fas fa-plus" id="add"></i></button>
 
-        </aside>
+    </aside>
+
+  </div>
+  <div class="column">
+    <form>
+      Title:
+      <input type="text" name="title" id="title">
+    </form>
+    <div>
+      <div id="editor">
+        {{editor}}
+
+        <p><br></p>
+
+      </div>
+      <button onclick="saveNote()" id="save-btn">Save</button>
+      <button onclick="deleteNote()" id="delete-btn">Delete</button>
+
 
     </div>
-    <div class="column">
-        <form>
-            Title:
-            <input type="text" name="title" id="title">
-        </form>
-        <div>
-            <div id="editor">
-                {{editor}}
-
-                <p><br></p>
-
-            </div>
-            <button onclick="saveNote()" id="save-btn">Save</button>
-            <button onclick="deleteNote()" id="delete-btn">Delete</button>
-
-
-        </div>
-    </div>
+  </div>
 </div>
 
 
@@ -64,103 +40,91 @@
 
 <script>
 
+  const toolbarOptions = [
+    ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+    ['blockquote', 'code-block'],
 
+    [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+    [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
+    [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
+    [{ 'direction': 'rtl' }],                         // text direction
 
-    const toolbarOptions = [
-        ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-        ['blockquote', 'code-block'],
+    [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
 
-        [{ 'header': 1 }, { 'header': 2 }],               // custom button values
-        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-        [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
-        [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
-        [{ 'direction': 'rtl' }],                         // text direction
+    [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+    [{ 'font': [] }],
+    [{ 'align': [] }],
 
-        [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
-        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+    ['clean']                                         // remove formatting button
+  ];
 
-        [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-        [{ 'font': [] }],
-        [{ 'align': [] }],
+  const options = {
+    debug: 'info',
+    modules: {
+      toolbar: toolbarOptions
+    },
+    placeholder: 'Compose an epic...',
+    readOnly: false,
+    theme: 'snow'
+  };
+  const editor = new Quill('#editor', options);
 
-        ['clean']                                         // remove formatting button
-    ];
+  const Delta = Quill.import('delta');
 
-    const options = {
-        debug: 'info',
-        modules: {
+  const testObject = [{ insert: 'Goodbye World' }]
 
-            toolbar: toolbarOptions
-        },
-        placeholder: 'Compose an epic...',
-        readOnly: false,
-        theme: 'snow'
-    };
-    const editor = new Quill('#editor', options);
-
-    const Delta = Quill.import('delta');
-
-    const testObject = [{ insert: 'Goodbye World' }]
-
-    const saveNote = _ => {
-        const content = editor.getContents()
-        const title = document.querySelector('#title').value
-        const stringifiedContent = JSON.stringify(content);
-        const noteObject = { title: title, content: stringifiedContent }
-        axios.post('note/create', noteObject).then(_ => {
-            console.log("new note created")
-        })
-
-    }
-
-    const fetchNotes = async _ => await axios.get('/getNotes')
-
-    const showNote = async e => {
-        const id = e.target.getAttribute('id');
-        console.log("this is the id >>>>>>>", id)
-        const { data: { title, content } } = await axios.get(`/setNote/${id}`)
-        editor.setContents(JSON.parse(content))
-        document.querySelector('#title').value = title
-    }
-
-    const foo = fetchNotes().then(({ data }) => {
-        const menuList = document.querySelector(".menu-list");
-        data.forEach(note => {
-            const listItem = document.createElement('li')
-            listItem.setAttribute('id', note._id)
-            listItem.innerHTML = note.title
-            listItem.addEventListener('click', showNote)
-            menuList.appendChild(listItem)
-        })
-        return data
+  const fetchNotes = async _ => {
+    const { data } = await axios.get('/note/getNotes')
+    const menuList = document.querySelector(".menu-list");
+    menuList.innerHTML = String();
+    data.forEach(note => {
+      const listItem = document.createElement('li')
+      listItem.setAttribute('id', note._id)
+      listItem.innerHTML = note.title
+      listItem.addEventListener('click', showNote)
+      menuList.appendChild(listItem)
     })
+    return data
+  }
 
+  const saveNote = async _ => {
+    const content = editor.getContents()
+    const title = document.querySelector('#title').value
+    const stringifiedContent = JSON.stringify(content);
+    const noteObject = { title: title, content: stringifiedContent }
+    const noteId = document.querySelector("#editor").getAttribute('active-note');
+    const postUrl = noteId ? `/note/updateNote/${noteId}` : 'note/create';
+    await axios.post(postUrl, noteObject).then(_ => console.log("new note created"))
+    fetchNotes();
+  }
 
-    const deleteNote = async _ => {
-        console.log("this is working")
+  const showNote = async e => {
+    const id = e.target.getAttribute('id');
+    const { data: { _id, title, content } } = await axios.get(`/note/setNote/${id}`)
+    editor.setContents(JSON.parse(content))
+    document.querySelector('#title').value = title
+    document.querySelector("#editor").setAttribute('active-note', _id)
+  }
 
-        await axios.delete('/deleteNote/_id')
+  const deleteNote = async _ => {
+    const noteId = document.querySelector("#editor").getAttribute('active-note');
+    const { data } = noteId && await axios.get(`/note/deleteNote/${noteId}`)
+    window.location.href = data;
+    fetchNotes()
+  }
 
-    }
+  const getCurrentNote = id => {
+    document.querySelector(id).value
+  }
 
+  const newNote = async _ => {
+    await axios.get('/newNote')
+    editor.setContents(options.placeholder)
+    document.querySelector('#title').value = ""
+  }
 
-    const getCurrentNote = id => {
-        document.querySelector(id).value
-    }
-
-
-    const newNote = async _ => {
-        await axios.get('/newNote')
-        editor.setContents(options.placeholder)
-        document.querySelector('#title').value = ""
-    }
-
-
-
-
-
-
-
-
+  window.addEventListener('load', _ => fetchNotes())
 
 </script>

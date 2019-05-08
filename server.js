@@ -6,7 +6,7 @@ const passport = require('passport');
 const flash = require('connect-flash');
 const path = require('path');
 
-const noteRoutes = require('./app/router/notes');
+const noteRoutes = require('./app/router/note');
 const stickyNoteRoutes = require('./app/router/sticky-notes');
 const listRoutes = require('./app/router/list');
 const reminderRoutes = require('./app/router/reminders');
@@ -63,7 +63,7 @@ app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 app.use(express.static('public'));
 app.use('/note', noteRoutes);
-app.use('/sticky-note', stickyNoteRoutes);
+app.use('/sticky', stickyNoteRoutes);
 app.use('/list', listRoutes);
 app.use('/reminder', reminderRoutes);
 

@@ -25,7 +25,7 @@
                 <h2>THRIVE</h2>
             </div>
             <div class="navbar-end">
-                {{#if loggedIn}}
+                {{#if user}}
                 <div class="navbar-item has-dropdown is-hoverable">
                     <a class="navbar-link">
                         More
@@ -54,6 +54,7 @@
     {{{body}}}
 
     <script src="./javascripts/script.js"></script>
+    <script src="./javascripts/utils.js"></script>
 </body>
 
 </html>
