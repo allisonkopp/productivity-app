@@ -12,23 +12,24 @@ module.exports = function(app, passport) {
 
   // PROFILE SECTION =========================
 
-  app.get('/profile', isLoggedIn, async (req, res) => {
+  /*
+  app.get('/profile', isLoggedIn, (req, res) => {
     app.locals.user = req.session.userId;
-    List.find({ author: req.session.userId }).then(listItems => {
-      res.render('profile', { listItems });
-    });
+    List.find({ author: req.session.userId })
+      .then(listItems => {
+        res.render('profile', { listItems });
+      })
+      .catch(err => console.log(err));
+  });
+  */
+
+  app.get('/profile', isLoggedIn, (req, res) => {
+    app.locals.user = req.session.userId;
     StickyNote.find({ author: req.session.userId })
       .then(items => {
         res.render('profile', { items });
       })
       .catch(err => console.log(err));
-  });
-
-  //fix?
-  app.get('/list/delete/:id', (req, res, next) => {
-    List.findByIdAndDelete(req.params.id)
-      .then(res.redirect('/profile'))
-      .catch(error => console.log(error));
   });
 
   /*
@@ -41,15 +42,6 @@ module.exports = function(app, passport) {
     res.send(parsedStickies);
   });
   */
-
-  app.get('/getStickies', isLoggedIn, async (req, res) => {
-    const allStickies = StickyNote.find({ author: req.session.userId });
-    const parsedStickies = await allStickies.exec((err, stickies) => {
-      if (err) return;
-      return (stickiesArray = stickies.map(n => n._doc));
-    });
-    res.send(parsedStickies);
-  });
 
   app.get('/deleteSticky/:id', isLoggedIn, async (req, res) => {
     StickyNote.findByIdAndDelete(req.params.id, (err, sticky) => {

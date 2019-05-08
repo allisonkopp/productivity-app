@@ -34,4 +34,10 @@ router.post('/updateList/:id', async (req, res, next) => {
   }
 });
 
+router.get('/delete/:id', (req, res, next) => {
+  List.findByIdAndDelete(req.params.id)
+    .then(res.redirect('/profile'))
+    .catch(error => console.log(error));
+});
+
 module.exports = router;

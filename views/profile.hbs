@@ -22,18 +22,23 @@
 			<div class="box">
 				<h2>To-Do List</h2>
 				<ul id="list-container">
-					{{#each listItems}}
+
+					{{!-- {{#each listItems}}
 					<li>
 						<form><i class="far fa-circle"></i>{{item}}</form>
 					</li>
-					{{/each}}
+					{{/each}} --}}
 				</ul>
 				<button onclick="addListItem()"><i class="fas fa-plus"></i></button>
 			</div>
 
-			<button onclick="getStickyNotes()">TEST ME</button>
+			<button onclick="fetchList()">TEST ME</button>
 
 
+			<form>
+				<a href="/"><i class="fas fa-plus"></i></a>
+				<input type="text">
+			</form>
 
 
 
@@ -53,7 +58,7 @@
 			const list = document.createElement('li')
 			const listForm = document.createElement('form')
 			list.appendChild(listForm)
-			return list
+			return listForm
 		}
 
 		const createListItem = _ => {
@@ -72,11 +77,9 @@
 		const saveListItem = _ => {
 			const listItem = createListItem()
 			const listInput = listItem.value
-
 			axios.post('/list/create', { item: listInput })
 				.then(_ => console.log("new list item created"))
-
-
+			//fetchNotes()
 		}
 
 
@@ -106,26 +109,48 @@
 		}
 
 		const fetchList = async _ => {
-			//const listContainer = document.querySelector('#list-container')
+			const listContainer = document.querySelector('#list-container')
+			const list = createListWrapper()
+			const test = document.createTextNode("please work")
+			list.appendChild(test)
+			console.log(list, "this is the list!!! first")
 			const { data } = await axios.get('/list/getList')
-			data.forEach(item => console.log(item._id))
+			data.forEach(item => {
+				const listItem = createListItem()
+				listItem.setAttribute('id', item._id)
+				listItem.setAttribute('value', item.item)
+				const checkbox = createCheckBox()
+				const deleteBtn = createDeleteBtn(item._id)
+				deleteBtn.appendChild(checkbox)
+				//console.log(deleteBtn, "delete")
+				const listItemRow = [deleteBtn, listItem]
+				console.log(listItem, "list item")
+				//checkbox.appendChild(listItem)
+				//console.log(checkbox)
+				//list.appendChild(checkbox)
+				//listItemRow.forEach(node => list.appendChild(node))
+				console.log(list, "this is the list")
+			})
+			listContainer.appendChild(list)
 			return data
 		}
 
-		/*
-			const fetchNotes = async _ => {
-					const { data } = await axios.get('/note/getNotes')
-					const menuList = document.querySelector(".menu-list");
-					menuList.innerHTML = String();
-					data.forEach(note => {
-						const listItem = document.createElement('li')
-						listItem.setAttribute('id', note._id)
-						listItem.innerHTML = note.title
-						listItem.addEventListener('click', showNote)
-						menuList.appendChild(listItem)
-					})
-					return data
-					*/
+
+		const deleteListItem = _ => {
+			const listForm = document.getElementsByTagName('form')
+			const deleteBtn = document.createElement('a')
+		}
+
+		const createDeleteBtn = id => {
+			const deleteBtn = document.createElement('a')
+			deleteBtn.setAttribute('href', `/list/delete/${id}`)
+			//console.log(deleteBtn)
+			return deleteBtn
+		}
+
+
+
+
 
 		/*
 			const saveListItem = async _ => {
@@ -134,8 +159,6 @@
 				await axios.post('/list/create', { item: listItem }).then(_ => console.log("new list item created"))
 			}
 			*/
-
-
 
 
 
@@ -193,7 +216,7 @@
 			//const stickyText = document.querySelector('#textarea')
 
 			//stickyContainer.innerHTML = String()
-			const { data } = await axios.get('/getStickies')
+			const { data } = await axios.get('/sticky/get')
 			console.log(data)
 
 		}
@@ -267,6 +290,9 @@
 		function setTranslate(xPos, yPos, el) {
 			el.style.transform = "translate3d(" + xPos + "px, " + yPos + "px, 0)";
 		}
+
+
+		window.addEventListener('load', _ => fetchList())
 
 
 	</script>

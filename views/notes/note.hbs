@@ -115,9 +115,6 @@
     fetchNotes()
   }
 
-  const getCurrentNote = id => {
-    document.querySelector(id).value
-  }
 
   const newNote = async _ => {
     await axios.get('/newNote')
