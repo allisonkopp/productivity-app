@@ -19,14 +19,14 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const hbs = require('hbs');
 
-var configDB = require('./config/database.js');
+//var configDB = require('./config/database.js');
 
 const Note = require('./app/models/note');
 const StickyNote = require('./app/models/sticky-note');
 const List = require('./app/models/list');
 const Reminder = require('./app/models/reminder');
 
-mongoose.connect(configDB.url); // connect to our database
+mongoose.connect(process.env.DB); // connect to our database
 
 //example
 hbs.registerHelper('capitalize', context => {
