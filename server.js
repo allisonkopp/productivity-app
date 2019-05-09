@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const flash = require('connect-flash');
 const path = require('path');
+require('dotenv').config();
 
 const noteRoutes = require('./app/router/note');
 const stickyNoteRoutes = require('./app/router/sticky-notes');
