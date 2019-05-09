@@ -9,34 +9,36 @@
       <ul class="menu-list">
         <li><a>New Note</a></li>
       </ul>
-      <button onclick="newNote()"><i class="fas fa-plus" id="add"></i></button>
 
     </aside>
+    <div id="add-note-btn">
+
+      <button onclick="newNote()"><i class="fas fa-plus" id="add"></i></button>
+    </div>
 
   </div>
-  <div class="column">
-    <form>
-      Title:
-      <input type="text" name="title" id="title">
-    </form>
-    <div>
-      <div id="editor">
-        {{editor}}
+  <div class="column" id="editor-wrapper">
+    <div id="editor-contents">
 
-        <p><br></p>
-
+      <div id="form-wrapper">
+        <form autocomplete="off">
+          Title:
+          <input type="text" name="title" id="title">
+        </form>
       </div>
-      <button onclick="saveNote()" id="save-btn">Save</button>
-      <button onclick="deleteNote()" id="delete-btn">Delete</button>
+      <div id="editor-container">
+        <div id="editor">
+          {{editor}}
+        </div>
+      </div>
+      <div id="note-btn-wrapper">
 
-
+        <button onclick="saveNote()" id="save-btn">Save</button>
+        <button onclick="deleteNote()" id="delete-btn">Delete</button>
+      </div>
     </div>
   </div>
 </div>
-
-
-
-
 
 <script>
 
@@ -99,6 +101,7 @@
     await axios.post(postUrl, noteObject).then(_ => console.log("new note created"))
     fetchNotes();
   }
+
 
   const showNote = async e => {
     const id = e.target.getAttribute('id');

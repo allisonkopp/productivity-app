@@ -7,6 +7,9 @@ const flash = require('connect-flash');
 const path = require('path');
 require('dotenv').config();
 
+const unirest = require('unirest');
+const cors = require('cors');
+
 const noteRoutes = require('./app/router/note');
 const stickyNoteRoutes = require('./app/router/sticky-notes');
 const listRoutes = require('./app/router/list');
@@ -47,6 +50,8 @@ app.use(cookieParser()); // read cookies (needed for auth)
 app.use(bodyParser.json()); // get information from html forms
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// app.use(cors());
+
 app.set('view engine', 'hbs');
 
 hbs.registerPartials(__dirname + '/views/partials');
@@ -59,10 +64,22 @@ app.use(
     saveUninitialized: true
   })
 );
+
+app.use(
+  cors({
+    allowedHeaders: ['sessionId', 'Content-Type'],
+    exposedHeaders: ['sessionId'],
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    preflightContinue: false
+  })
+);
+
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 app.use(express.static('public'));
+
 app.use('/note', noteRoutes);
 app.use('/sticky', stickyNoteRoutes);
 app.use('/list', listRoutes);

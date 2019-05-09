@@ -1,251 +1,251 @@
-<div>
-	<div class="columns">
-		<div class="column is-1">
-			<aside class="menu">
-				<ul class="menu-list">
-					<li><a href="/profile"><i class="fas fa-home fa-2x"></i></a></li>
-					<li><a href="/note"><i class="far fa-sticky-note fa-2x"></i></a></li>
-					<li><a><i class="far fa-calendar-alt fa-2x"></i></a></li>
-					<li><a><i class="fas fa-book fa-2x"></i></a></li>
-					<li><a><i class="fas fa-bullseye fa-2x"></i></a></li>
-					<li><a href="/reminder"><i class="far fa-bell fa-2x"></i></a></li>
-				</ul>
-			</aside>
+<div class="columns">
+	<div class="column is-2">
+		<aside class="menu">
+			<ul class="menu-list">
+				<li><a href="/profile"><i class="fas fa-home fa-2x"></i></a></li>
+				<li><a href="/note"><i class="far fa-sticky-note fa-2x"></i></a></li>
+				<li><a><i class="far fa-calendar-alt fa-2x"></i></a></li>
+				<li><a><i class="fas fa-book fa-2x"></i></a></li>
+				<li><a><i class="fas fa-bullseye fa-2x"></i></a></li>
+				<li><a href="/reminder"><i class="far fa-bell fa-2x"></i></a></li>
+			</ul>
+		</aside>
+	</div>
+	<div class="column dashboard">
+		<div>
+			<button id="add-sticky" onclick="createStickyNote()"><a>Add stickey note</a></button>
+			<button><a>Get inspired</a></button>
+			<button><a>Word of the day</a></button>
 		</div>
-		<div class="column">
-			<div>
-				<button id="add-sticky" onclick="createStickyNote()"><a>Add stickey note</a></button>
-				<button><a>Get inspired</a></button>
-				<button><a>Word of the day</a></button>
-			</div>
 
-			<div class="box">
-				<h2>To-Do List</h2>
-				<ul id="list-container">
+		<div class="box">
+			<h2>To-Do List</h2>
+			<ul id="list-container">
 
-					{{!-- {{#each listItems}}
+				{{!-- {{#each listItems}}
 					<li>
 						<form><i class="far fa-circle"></i>{{item}}</form>
 					</li>
 					{{/each}} --}}
-				</ul>
-				<button onclick="addListItem()"><i class="fas fa-plus"></i></button>
-			</div>
+			</ul>
+			<button onclick="addListItem()"><i class="fas fa-plus"></i></button>
+		</div>
 
-			<button onclick="fetchList()">TEST ME</button>
-
-
-			<form>
-				<i href="/" class="fas fa-plus"></i>
-				<input type="text">
-			</form>
+		<button onclick="fetchList()">TEST ME</button>
 
 
+		<form>
+			<i href="/" class="fas fa-plus"></i>
+			<input type="text">
+		</form>
 
 
-			<div id="container">
-				 {{#each items}}
-				{{> stickyPartial}}
-				{{/each}} 
 
-			</div>
+
+		<div id="container">
+			 {{#each items}}
+			{{> stickyPartial}}
+			{{/each}} 
+
 		</div>
 	</div>
+</div>
 
-	<script>
+<script>
+
+	axios.get('http://api.forismatic.com/api/1.0/')
+		.then(data => console.log(data))
 
 
-		/*
-	const createListWrapper = _ => {
+
+	/*
+const createListWrapper = _ => {
+	const list = document.createElement('li')
+	const listForm = document.createElement('form')
+	list.appendChild(listForm)
+	return listForm
+}
+*/
+
+	const createListItem = _ => {
+		const listInput = document.createElement('input')
+		listInput.setAttribute('type', 'text')
+		listInput.setAttribute('class', 'list-input')
+		listInput.setAttribute('onblur', 'document.listForm.submit')
+		return listInput
+	}
+
+	const createCheckBox = _ => {
+		const deleteBtn = document.createElement('a')
+		//deleteBtn.setAttribute('href', 'deleteListItem()')
+		const checkbox = document.createElement('i')
+		checkbox.setAttribute('class', 'far fa-circle')
+		deleteBtn.appendChild(checkbox)
+		return deleteBtn
+	}
+
+	const createListRow = _ => {
 		const list = document.createElement('li')
 		const listForm = document.createElement('form')
+		listForm.setAttribute('name', 'listForm')
+		listForm.setAttribute('action', '/list/create')
+		const listItems = [createCheckBox(), createListItem()]
+		listItems.forEach(node => listForm.appendChild(node))
 		list.appendChild(listForm)
 		return listForm
 	}
+
+
+	/*
+	const saveListItem = _ => {
+		const listItem = createListItem()
+		const listInput = listItem.value
+		axios.post('/list/create', { item: listInput })
+			.then(_ => console.log("new list item created"))
+		//fetchNotes()
+	}
 	*/
 
-		const createListItem = _ => {
-			const listInput = document.createElement('input')
-			listInput.setAttribute('type', 'text')
-			listInput.setAttribute('class', 'list-input')
-			listInput.setAttribute('onblur', 'document.listForm.submit')
-			return listInput
-		}
+
+	const addListItem = _ => {
+		const listContainer = document.querySelector('#list-container')
+		const listRow = createListRow()
+		listContainer.appendChild(listRow)
+	}
 
 
 
+	/*
 
-		const createCheckBox = _ => {
-			const deleteBtn = document.createElement('a')
-			//deleteBtn.setAttribute('href', 'deleteListItem()')
-			const checkbox = document.createElement('i')
-			checkbox.setAttribute('class', 'far fa-circle')
-			deleteBtn.appendChild(checkbox)
-			return deleteBtn
-		}
-
-		const createListRow = _ => {
-			const list = document.createElement('li')
-			const listForm = document.createElement('form')
-			listForm.setAttribute('name', 'listForm')
-			listForm.setAttribute('action', '/list/create')
-			const listItems = [createCheckBox(), createListItem()]
-			listItems.forEach(node => listForm.appendChild(node))
-			list.appendChild(listForm)
-			return listForm
-		}
+	const addListItem = _ => {
+		const listContainer = document.querySelector('#list-container')
+		const listElements = [createCheckBox(), createListItem()]
+		const list = createListWrapper()
+		listElements.forEach(node => {
+			list.appendChild(node)
+			saveListItem()   //not working
+		})
+		listContainer.appendChild(list)
+		//list.addEventListener('blur', saveListItem)
+	}
+	*/
 
 
-		/*
-		const saveListItem = _ => {
-			const listItem = createListItem()
-			const listInput = listItem.value
-			axios.post('/list/create', { item: listInput })
-				.then(_ => console.log("new list item created"))
-			//fetchNotes()
-		}
-		*/
 
-
-		const addListItem = _ => {
+	/*
+		const fetchList = async _ => {
 			const listContainer = document.querySelector('#list-container')
-			const listRow = createListRow()
-			listContainer.appendChild(listRow)
-		}
-
-
-
-		/*
-
-		const addListItem = _ => {
-			const listContainer = document.querySelector('#list-container')
-			const listElements = [createCheckBox(), createListItem()]
 			const list = createListWrapper()
-			listElements.forEach(node => {
-				list.appendChild(node)
-				saveListItem()   //not working
+			const test = document.createTextNode("please work")
+			list.appendChild(test)
+			console.log(list, "this is the list!!! first")
+			const { data } = await axios.get('/list/getList')
+			data.forEach(item => {
+				const listItem = createListItem()
+				listItem.setAttribute('id', item._id)
+				listItem.setAttribute('value', item.item)
+				const checkbox = createCheckBox()
+				const deleteBtn = createDeleteBtn(item._id)
+				deleteBtn.appendChild(checkbox)
+				//console.log(deleteBtn, "delete")
+				const listItemRow = [deleteBtn, listItem]
+				console.log(listItem, "list item")
+				//checkbox.appendChild(listItem)
+				//console.log(checkbox)
+				//list.appendChild(checkbox)
+				//listItemRow.forEach(node => list.appendChild(node))
+				console.log(list, "this is the list")
 			})
 			listContainer.appendChild(list)
-			//list.addEventListener('blur', saveListItem)
+			return data
+		}
+		*/
+
+
+	const deleteListItem = _ => {
+		const listForm = document.getElementsByTagName('form')
+		const deleteBtn = document.createElement('a')
+	}
+
+	const createDeleteBtn = id => {
+		const deleteBtn = document.createElement('a')
+		deleteBtn.setAttribute('href', `/list/delete/${id}`)
+		//console.log(deleteBtn)
+		return deleteBtn
+	}
+
+
+
+
+
+	/*
+		const saveListItem = async _ => {
+			const listItem = document.querySelector('.list-input').value
+			console.log(listItem)
+			await axios.post('/list/create', { item: listItem }).then(_ => console.log("new list item created"))
 		}
 		*/
 
 
 
-		/*
-			const fetchList = async _ => {
-				const listContainer = document.querySelector('#list-container')
-				const list = createListWrapper()
-				const test = document.createTextNode("please work")
-				list.appendChild(test)
-				console.log(list, "this is the list!!! first")
-				const { data } = await axios.get('/list/getList')
-				data.forEach(item => {
-					const listItem = createListItem()
-					listItem.setAttribute('id', item._id)
-					listItem.setAttribute('value', item.item)
-					const checkbox = createCheckBox()
-					const deleteBtn = createDeleteBtn(item._id)
-					deleteBtn.appendChild(checkbox)
-					//console.log(deleteBtn, "delete")
-					const listItemRow = [deleteBtn, listItem]
-					console.log(listItem, "list item")
-					//checkbox.appendChild(listItem)
-					//console.log(checkbox)
-					//list.appendChild(checkbox)
-					//listItemRow.forEach(node => list.appendChild(node))
-					console.log(list, "this is the list")
-				})
-				listContainer.appendChild(list)
-				return data
-			}
-			*/
+
+	const createStickyWrapper = _ => {
+		const sticky = document.createElement('div')
+		sticky.setAttribute('class', 'sticky-note')
+		const article = document.createElement('article')
+		article.setAttribute('class', 'message is-info')
+		sticky.appendChild(article);
+		return sticky
+	}
+
+	const createStickyHeader = _ => {
+		const header = document.createElement('div')
+		header.setAttribute('class', 'message-header')
+		header.setAttribute('class', 'stickey-header')
+		const button = document.createElement('button')
+		button.setAttribute('class', 'delete')
+		button.setAttribute('onclick', 'deleteStickyNote()')
+		button.setAttribute('aria-label', 'delete')
+		header.appendChild(button)
+		return header
+	}
+
+	const createStickyBody = _ => {
+		const body = document.createElement('div')
+		body.setAttribute('class', 'message-body')
+		const form = document.createElement('form')
+		form.setAttribute('wrap', 'hard')
+		form.setAttribute('class', 'form')
+		const textArea = document.createElement('textArea')
+		//textArea.setAttribute('onkeyup', 'saveStickyNote()')
+		textArea.setAttribute('class', 'input')
+		textArea.setAttribute('class', 'textarea')
+		textArea.setAttribute('placeholder', 'Enter text...')
+		textArea.setAttribute('rows', '10')
+		body.appendChild(form)
+		body.appendChild(textArea)
+		return body
+	}
+
+	const createStickyNote = _ => {
+		const stickyContainer = document.querySelector('#container')
+		const stickyNote = createStickyWrapper()
+		const stickyContent = [createStickyHeader(), createStickyBody()]
+		stickyContent.forEach(node => stickyNote.appendChild(node))
+		stickyContainer.appendChild(stickyNote);
+		axios.post('/sticky/create', { content: 'create me' })
+
+	}
 
 
-		const deleteListItem = _ => {
-			const listForm = document.getElementsByTagName('form')
-			const deleteBtn = document.createElement('a')
-		}
+	const getStickyNotes = async _ => {
+		//const stickyText = document.querySelector('#textarea')
 
-		const createDeleteBtn = id => {
-			const deleteBtn = document.createElement('a')
-			deleteBtn.setAttribute('href', `/list/delete/${id}`)
-			//console.log(deleteBtn)
-			return deleteBtn
-		}
+		//stickyContainer.innerHTML = String()
+		const { data } = await axios.get('/sticky/get')
+		console.log(data)
 
-
-
-
-
-		/*
-			const saveListItem = async _ => {
-				const listItem = document.querySelector('.list-input').value
-				console.log(listItem)
-				await axios.post('/list/create', { item: listItem }).then(_ => console.log("new list item created"))
-			}
-			*/
-
-
-
-
-		const createStickyWrapper = _ => {
-			const sticky = document.createElement('div')
-			sticky.setAttribute('class', 'sticky-note')
-			const article = document.createElement('article')
-			article.setAttribute('class', 'message is-info')
-			sticky.appendChild(article);
-			return sticky
-		}
-
-		const createStickyHeader = _ => {
-			const header = document.createElement('div')
-			header.setAttribute('class', 'message-header')
-			header.setAttribute('class', 'stickey-header')
-			const button = document.createElement('button')
-			button.setAttribute('class', 'delete')
-			button.setAttribute('onclick', 'deleteStickyNote()')
-			button.setAttribute('aria-label', 'delete')
-			header.appendChild(button)
-			return header
-		}
-
-		const createStickyBody = _ => {
-			const body = document.createElement('div')
-			body.setAttribute('class', 'message-body')
-			const form = document.createElement('form')
-			form.setAttribute('wrap', 'hard')
-			form.setAttribute('class', 'form')
-			const textArea = document.createElement('textArea')
-			//textArea.setAttribute('onkeyup', 'saveStickyNote()')
-			textArea.setAttribute('class', 'input')
-			textArea.setAttribute('class', 'textarea')
-			textArea.setAttribute('placeholder', 'Enter text...')
-			textArea.setAttribute('rows', '10')
-			body.appendChild(form)
-			body.appendChild(textArea)
-			return body
-		}
-
-		const createStickyNote = _ => {
-			const stickyContainer = document.querySelector('#container')
-			const stickyNote = createStickyWrapper()
-			const stickyContent = [createStickyHeader(), createStickyBody()]
-			stickyContent.forEach(node => stickyNote.appendChild(node))
-			stickyContainer.appendChild(stickyNote);
-			axios.post('/sticky/create', { content: 'create me' })
-
-		}
-
-
-		const getStickyNotes = async _ => {
-			//const stickyText = document.querySelector('#textarea')
-
-			//stickyContainer.innerHTML = String()
-			const { data } = await axios.get('/sticky/get')
-			console.log(data)
-
-		}
+	}
 
 
 
@@ -253,72 +253,72 @@
 
 
 
-		const container = document.querySelector("#container");
-		let activeItem = null;
+	const container = document.querySelector("#container");
+	let activeItem = null;
 
-		let active = false;
+	let active = false;
 
-		container.addEventListener("touchstart", dragStart, false);
-		container.addEventListener("touchend", dragEnd, false);
-		container.addEventListener("touchmove", drag, false);
+	container.addEventListener("touchstart", dragStart, false);
+	container.addEventListener("touchend", dragEnd, false);
+	container.addEventListener("touchmove", drag, false);
 
-		container.addEventListener("mousedown", dragStart, false);
-		container.addEventListener("mouseup", dragEnd, false);
-		container.addEventListener("mousemove", drag, false);
+	container.addEventListener("mousedown", dragStart, false);
+	container.addEventListener("mouseup", dragEnd, false);
+	container.addEventListener("mousemove", drag, false);
 
-		function dragStart(e) {
-			if (e.target !== e.currentTarget) {
-				active = true;
-				activeItem = locateNode(e.target, 'sticky-note');
-				if (activeItem !== null) {
-					if (!activeItem.xOffset) {
-						activeItem.xOffset = 0;
-					}
-					if (!activeItem.yOffset) {
-						activeItem.yOffset = 0;
-					}
-					if (e.type === "touchstart") {
-						activeItem.initialX = e.touches[0].clientX - activeItem.xOffset;
-						activeItem.initialY = e.touches[0].clientY - activeItem.yOffset;
-					} else {
-						activeItem.initialX = e.clientX - activeItem.xOffset;
-						activeItem.initialY = e.clientY - activeItem.yOffset;
-					}
-				}
-			}
-		}
-
-		function dragEnd(e) {
+	function dragStart(e) {
+		if (e.target !== e.currentTarget) {
+			active = true;
+			activeItem = locateNode(e.target, 'sticky-note');
 			if (activeItem !== null) {
-				activeItem.initialX = activeItem.currentX;
-				activeItem.initialY = activeItem.currentY;
-			}
-			active = false;
-			activeItem = null;
-		}
-
-		function drag(e) {
-			if (active) {
-				if (e.type === "touchmove") {
-					e.preventDefault();
-					activeItem.currentX = e.touches[0].clientX - activeItem.initialX;
-					activeItem.currentY = e.touches[0].clientY - activeItem.initialY;
-				} else {
-					activeItem.currentX = e.clientX - activeItem.initialX;
-					activeItem.currentY = e.clientY - activeItem.initialY;
+				if (!activeItem.xOffset) {
+					activeItem.xOffset = 0;
 				}
-				activeItem.xOffset = activeItem.currentX;
-				activeItem.yOffset = activeItem.currentY;
-				setTranslate(activeItem.currentX, activeItem.currentY, activeItem);
+				if (!activeItem.yOffset) {
+					activeItem.yOffset = 0;
+				}
+				if (e.type === "touchstart") {
+					activeItem.initialX = e.touches[0].clientX - activeItem.xOffset;
+					activeItem.initialY = e.touches[0].clientY - activeItem.yOffset;
+				} else {
+					activeItem.initialX = e.clientX - activeItem.xOffset;
+					activeItem.initialY = e.clientY - activeItem.yOffset;
+				}
 			}
 		}
+	}
 
-		function setTranslate(xPos, yPos, el) {
-			el.style.transform = "translate3d(" + xPos + "px, " + yPos + "px, 0)";
+	function dragEnd(e) {
+		if (activeItem !== null) {
+			activeItem.initialX = activeItem.currentX;
+			activeItem.initialY = activeItem.currentY;
 		}
+		active = false;
+		activeItem = null;
+	}
+
+	function drag(e) {
+		if (active) {
+			if (e.type === "touchmove") {
+				e.preventDefault();
+				activeItem.currentX = e.touches[0].clientX - activeItem.initialX;
+				activeItem.currentY = e.touches[0].clientY - activeItem.initialY;
+			} else {
+				activeItem.currentX = e.clientX - activeItem.initialX;
+				activeItem.currentY = e.clientY - activeItem.initialY;
+			}
+			activeItem.xOffset = activeItem.currentX;
+			activeItem.yOffset = activeItem.currentY;
+			setTranslate(activeItem.currentX, activeItem.currentY, activeItem);
+		}
+	}
+
+	function setTranslate(xPos, yPos, el) {
+		el.style.transform = "translate3d(" + xPos + "px, " + yPos + "px, 0)";
+	}
 
 
 		//window.addEventListener('load', _ => fetchList())
 
 
-	</script>
+</script>

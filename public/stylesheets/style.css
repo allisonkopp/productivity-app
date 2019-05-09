@@ -3,6 +3,12 @@ nav {
   height: 10vh;
 }
 
+nav h2 {
+  font-weight: 800;
+  font-size: 4vh;
+  margin-left: 4vw;
+}
+
 @media only screen and (min-width: 600px) {
   nav {
     height: 5vh;
@@ -23,6 +29,10 @@ a {
   border: 1px solid black;
 }
 
+/* div {
+  border: 1px solid red;
+} */
+
 .main {
   background-image: url('https://pilbox.themuse.com/image.jpg?url=https%3A%2F%2Fassets.themuse.com%2Fuploaded%2Fattachments%2F17954.jpg%3Fv%3D940099b9b79be5183457207d95b446e25bf98053a4cd7bf65706dc543c19823a&h=367&prog=1');
   font-size: 80px;
@@ -35,17 +45,20 @@ a {
   align-items: center;
 }
 
-.main-card {
-  justify-content: space-around;
-}
-
 .menu {
   height: 100vh;
+  background-color: rgb(4, 30, 59r4);
+  /* width: 15vw; */
+  /* margin-left: 10vh; */
 }
 
 .menu-list a {
   text-decoration: none;
   text-align: center;
+}
+
+.dashboard {
+  background-color: gray;
 }
 
 .sticky-note {
@@ -55,6 +68,72 @@ a {
 
 #editor {
   height: 80vh;
+  /* opacity: 1; */
+}
+
+#editor-wrapper {
+  background-image: url('https://i.pinimg.com/originals/d5/16/17/d51617f09a01efe3333db16572bc9b7c.jpg');
+  background-size: cover;
+  justify-content: center;
+}
+
+#editor-wrapper input {
+  width: 90%;
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+#editor-wrapper input:focus {
+  outline: none;
+}
+
+#editor-contents {
+  /* margin: 0 auto; */
+  height: 100%;
+}
+
+#form-wrapper {
+  text-align: center;
+  color: black;
+  font-size: 20px;
+  background-color: rgb(211, 211, 211, 0.6);
+  width: 85%;
+
+  margin: 0 auto;
+}
+
+#editor-container {
+  width: 85%;
+  background-color: rgba(255, 255, 255, 0.6);
+  margin: 0 auto;
+}
+
+#note-btn-wrapper {
+  text-align: center;
+  margin: 0 auto;
+  width: 85%;
+  justify-content: space-evenly;
+  display: flex;
+  padding: 10px;
+  background-color: rgb(211, 211, 211, 0.6);
+}
+
+#note-btn-wrapper button {
+  border-radius: 4px;
+  font-size: 14px;
+  padding: 10px;
+}
+
+.note-btn:hover {
+  background-color: rgb(220, 220, 220);
+}
+
+#add-note-btn {
+  text-align: center;
+}
+
+#add-note-btn button {
+  padding: 10px;
+  font-size: 20px;
 }
 
 .box {

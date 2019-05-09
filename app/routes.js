@@ -2,6 +2,8 @@ const Note = require('./models/note');
 const StickyNote = require('./models/sticky-note');
 const List = require('./models/list');
 const Reminder = require('./models/reminder');
+// const unirest = require('unirest');
+// const unirestWrapper = unirest();
 
 module.exports = function(app, passport) {
   // normal routes ===============================================================
@@ -31,6 +33,18 @@ module.exports = function(app, passport) {
       })
       .catch(err => console.log(err));
   });
+
+  /*
+  app.get('/profile', isLoggedIn, (req, res) => {
+    unirestWrapper
+      .get('https://timshim-quotes-v1.p.rapidapi.com/quotes')
+      .header('X-RapidAPI-Host', 'timshim-quotes-v1.p.rapidapi.com')
+      .header('X-RapidAPI-Key', '77da8cb0damsh191667c813a24fdp182959jsnd89e6092fe54')
+      .end(function(result) {
+        console.log(result.status, result.headers, result.body);
+      });
+  });
+  */
 
   /*
   app.get('/getList', isLoggedIn, async (req, res) => {
