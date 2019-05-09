@@ -3,6 +3,12 @@ nav {
   height: 10vh;
 }
 
+@media only screen and (min-width: 600px) {
+  nav {
+    height: 5vh;
+  }
+}
+
 a {
   text-decoration: none;
   color: black;
@@ -13,12 +19,24 @@ a {
   font-weight: 700;
 }
 
+.box {
+  border: 1px solid black;
+}
+
 .main {
   background-image: url('https://pilbox.themuse.com/image.jpg?url=https%3A%2F%2Fassets.themuse.com%2Fuploaded%2Fattachments%2F17954.jpg%3Fv%3D940099b9b79be5183457207d95b446e25bf98053a4cd7bf65706dc543c19823a&h=367&prog=1');
   font-size: 80px;
   background-size: cover;
   width: 100%;
   height: 80vh;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.main-card {
+  justify-content: space-around;
 }
 
 .menu {
@@ -42,22 +60,6 @@ a {
 .box {
   width: 20vw;
 }
-
-/* #container {
-  width: 100%;
-  height: 400px;
-  background-color: #333;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  border-radius: 7px;
-  touch-action: none;
-} */
-
-/* #menu-list > i {
-  padding-top: 20px;
-} */
 
 form {
   display: inline;

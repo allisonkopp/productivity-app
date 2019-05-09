@@ -36,7 +36,7 @@
 
 
 			<form>
-				<a href="/"><i class="fas fa-plus"></i></a>
+				<i href="/" class="fas fa-plus"></i>
 				<input type="text">
 			</form>
 
@@ -54,26 +54,49 @@
 
 	<script>
 
-		const createListWrapper = _ => {
-			const list = document.createElement('li')
-			const listForm = document.createElement('form')
-			list.appendChild(listForm)
-			return listForm
-		}
+
+		/*
+	const createListWrapper = _ => {
+		const list = document.createElement('li')
+		const listForm = document.createElement('form')
+		list.appendChild(listForm)
+		return listForm
+	}
+	*/
 
 		const createListItem = _ => {
 			const listInput = document.createElement('input')
 			listInput.setAttribute('type', 'text')
 			listInput.setAttribute('class', 'list-input')
+			listInput.setAttribute('onblur', 'document.listForm.submit')
 			return listInput
 		}
 
+
+
+
 		const createCheckBox = _ => {
+			const deleteBtn = document.createElement('a')
+			//deleteBtn.setAttribute('href', 'deleteListItem()')
 			const checkbox = document.createElement('i')
 			checkbox.setAttribute('class', 'far fa-circle')
-			return checkbox
+			deleteBtn.appendChild(checkbox)
+			return deleteBtn
 		}
 
+		const createListRow = _ => {
+			const list = document.createElement('li')
+			const listForm = document.createElement('form')
+			listForm.setAttribute('name', 'listForm')
+			listForm.setAttribute('action', '/list/create')
+			const listItems = [createCheckBox(), createListItem()]
+			listItems.forEach(node => listForm.appendChild(node))
+			list.appendChild(listForm)
+			return listForm
+		}
+
+
+		/*
 		const saveListItem = _ => {
 			const listItem = createListItem()
 			const listInput = listItem.value
@@ -81,20 +104,18 @@
 				.then(_ => console.log("new list item created"))
 			//fetchNotes()
 		}
+		*/
+
+
+		const addListItem = _ => {
+			const listContainer = document.querySelector('#list-container')
+			const listRow = createListRow()
+			listContainer.appendChild(listRow)
+		}
 
 
 
 		/*
-		const updateListItem = _ => {
-			const listInput = createListItem().value
-			fetchList().forEach(item => {
-				axios.post(`/list/updateList/#${item._id}`, listInput)
-			})
-		}
-		*/
-
-
-
 
 		const addListItem = _ => {
 			const listContainer = document.querySelector('#list-container')
@@ -107,33 +128,38 @@
 			listContainer.appendChild(list)
 			//list.addEventListener('blur', saveListItem)
 		}
+		*/
 
-		const fetchList = async _ => {
-			const listContainer = document.querySelector('#list-container')
-			const list = createListWrapper()
-			const test = document.createTextNode("please work")
-			list.appendChild(test)
-			console.log(list, "this is the list!!! first")
-			const { data } = await axios.get('/list/getList')
-			data.forEach(item => {
-				const listItem = createListItem()
-				listItem.setAttribute('id', item._id)
-				listItem.setAttribute('value', item.item)
-				const checkbox = createCheckBox()
-				const deleteBtn = createDeleteBtn(item._id)
-				deleteBtn.appendChild(checkbox)
-				//console.log(deleteBtn, "delete")
-				const listItemRow = [deleteBtn, listItem]
-				console.log(listItem, "list item")
-				//checkbox.appendChild(listItem)
-				//console.log(checkbox)
-				//list.appendChild(checkbox)
-				//listItemRow.forEach(node => list.appendChild(node))
-				console.log(list, "this is the list")
-			})
-			listContainer.appendChild(list)
-			return data
-		}
+
+
+		/*
+			const fetchList = async _ => {
+				const listContainer = document.querySelector('#list-container')
+				const list = createListWrapper()
+				const test = document.createTextNode("please work")
+				list.appendChild(test)
+				console.log(list, "this is the list!!! first")
+				const { data } = await axios.get('/list/getList')
+				data.forEach(item => {
+					const listItem = createListItem()
+					listItem.setAttribute('id', item._id)
+					listItem.setAttribute('value', item.item)
+					const checkbox = createCheckBox()
+					const deleteBtn = createDeleteBtn(item._id)
+					deleteBtn.appendChild(checkbox)
+					//console.log(deleteBtn, "delete")
+					const listItemRow = [deleteBtn, listItem]
+					console.log(listItem, "list item")
+					//checkbox.appendChild(listItem)
+					//console.log(checkbox)
+					//list.appendChild(checkbox)
+					//listItemRow.forEach(node => list.appendChild(node))
+					console.log(list, "this is the list")
+				})
+				listContainer.appendChild(list)
+				return data
+			}
+			*/
 
 
 		const deleteListItem = _ => {
@@ -292,7 +318,7 @@
 		}
 
 
-		window.addEventListener('load', _ => fetchList())
+		//window.addEventListener('load', _ => fetchList())
 
 
 	</script>

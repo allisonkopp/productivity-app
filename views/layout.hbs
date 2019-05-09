@@ -15,14 +15,29 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 
+
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+        <!-- navbar items, navbar burger... -->
+    </div>
+</nav>
+
 <body>
     <nav class="navbar" role="navigation" aria-label="main navigation">
-        <div id="navbarBasicExample" class="navbar-menu">
-            <div class="navbar-start">
-                <h2><a href="/">THRIVE</a></h2>
-            </div>
-            <div class="navbar-end">
+        <div class="navbar-brand">
+            <h2><a href="/">THRIVE</a></h2>
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu">
+
+            <div class="navbar-end ">
                 {{#if user}}
+                <a href='/profile'>Home</a>
                 <div class="navbar-item has-dropdown is-hoverable">
                     <a class="navbar-link">
                         More
@@ -46,6 +61,7 @@
                 {{/if}}
             </div>
         </div>
+
     </nav>
 
     {{{body}}}
