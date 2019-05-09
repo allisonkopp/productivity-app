@@ -38,6 +38,8 @@ hbs.registerHelper('json', context => {
   return JSON.stringify(context);
 });
 
+const hi = 'test';
+
 require('./config/passport')(passport); // pass passport for configuration
 
 app.use(morgan('dev')); // log every request to the console
