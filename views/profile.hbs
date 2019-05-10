@@ -254,7 +254,7 @@
   const fetchQuote = async _ => {
     const { data: quote } = await axios.get('/quotes/qod');
     const quoteNote = document.querySelector('.quote');
-    console.log(quote)
+    console.log(quoteNote)
     quoteNote.innerHTML = quote;
   }
   window.addEventListener('load', _ => {

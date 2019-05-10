@@ -58,6 +58,7 @@ a {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-position-y: center;
 }
 
 .main-content {
@@ -69,21 +70,27 @@ a {
 .main-content h2 {
   font-size: 30px;
   padding: 8vh 10vw;
-  margin-top: 10vh;
+  margin-top: 7vh;
   color: black;
 }
 
 .main-content button {
   margin: 0 auto;
   display: flex;
+  padding: 16px;
 }
 
 .main-card h2 {
   justify-content: center;
 }
 
+.card-index {
+  border: 3px solid black;
+}
+
 #main-boxes {
   justify-content: space-evenly;
+  padding-top: 10vh;
 }
 
 .menu {
@@ -179,6 +186,11 @@ a {
 .sticky-note {
   width: 25vw;
   position: absolute;
+}
+
+#add-sticky {
+  margin-top: 50vh;
+  font-size: 20px;
 }
 
 /* .sticky-note textarea {
