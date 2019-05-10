@@ -2,28 +2,37 @@ const express = require('express');
 const router = express.Router();
 const StickyNote = require('../models/sticky-note');
 
-router.post('/create', async (req, res, next) => {
-  console.log('posting', req.body);
+router.post('/create', async (req, res) => {
   const { content } = req.body;
   const sitckyNoteData = { content };
-  const newStickyNote = await StickyNote.create(sitckyNoteData, error => console.log(error));
-  newStickyNote.addAuthor(req.session.userId);
-  next();
-});
-
-router.get('/get', async (req, res) => {
-  const allStickies = StickyNote.find({ author: req.session.userId });
-  const parsedStickies = await allStickies.exec((err, stickies) => {
+  const newSticky = new StickyNote(sitckyNoteData);
+  newSticky.save((err, sticky) => {
     if (err) return;
-    return (stickiesArray = stickies.map(n => n._doc));
+    sticky.addAuthor(req.session.userId);
+    res.send(sticky);
   });
-  res.send(parsedStickies);
 });
 
-router.get('/delete/:id', async (req, res) => {
-  await StickyNote.findById(req.params.id, (err, sticky) => {
+router.post('/update/:id', (req, res) => {
+  const id = req.params.id;
+  const stickyData = { content: req.body.content };
+  StickyNote.findByIdAndUpdate(id, stickyData, { new: true }, (err, sticky) => !err && res.send(sticky));
+});
+
+router.get('/getAll', (req, res) => {
+  const allStickies = StickyNote.find({ author: req.session.userId });
+  allStickies.exec((err, sticky) => {
+    if (err) return;
+    const stickyArray = sticky.map(s => s._doc);
+    res.send(stickyArray);
+  });
+});
+
+router.get('/delete/:id', (req, res) => {
+  StickyNote.findById(req.params.id, (err, sticky) => {
+    if (err) return;
     sticky.remove();
-    res.send('/profile'); //redirect not working, had to send route to the client
+    res.send('/profile');
   });
 });
 

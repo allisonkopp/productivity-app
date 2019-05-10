@@ -78,7 +78,7 @@
   const testObject = [{ insert: 'Goodbye World' }]
 
   const fetchNotes = async _ => {
-    const { data } = await axios.get('/note/getNotes')
+    const { data = [] } = await axios.get('/note/getAll')
     const menuList = document.querySelector(".menu-list");
     menuList.innerHTML = String();
     data.forEach(note => {
@@ -88,7 +88,6 @@
       listItem.addEventListener('click', showNote)
       menuList.appendChild(listItem)
     })
-    return data
   }
 
   const saveNote = async _ => {
@@ -97,15 +96,14 @@
     const stringifiedContent = JSON.stringify(content);
     const noteObject = { title: title, content: stringifiedContent }
     const noteId = document.querySelector("#editor").getAttribute('active-note');
-    const postUrl = noteId ? `/note/updateNote/${noteId}` : 'note/create';
+    const postUrl = noteId ? `/note/update/${noteId}` : 'note/create';
     await axios.post(postUrl, noteObject).then(_ => console.log("new note created"))
     fetchNotes();
   }
 
-
   const showNote = async e => {
     const id = e.target.getAttribute('id');
-    const { data: { _id, title, content } } = await axios.get(`/note/setNote/${id}`)
+    const { data: { _id, title, content } } = await axios.get(`/note/set/${id}`)
     editor.setContents(JSON.parse(content))
     document.querySelector('#title').value = title
     document.querySelector("#editor").setAttribute('active-note', _id)
@@ -113,16 +111,15 @@
 
   const deleteNote = async _ => {
     const noteId = document.querySelector("#editor").getAttribute('active-note');
-    const { data } = noteId && await axios.get(`/note/deleteNote/${noteId}`)
+    const { data } = noteId && await axios.get(`/note/delete/${noteId}`)
     window.location.href = data;
     fetchNotes()
   }
 
-
   const newNote = async _ => {
-    await axios.get('/newNote')
     editor.setContents(options.placeholder)
     document.querySelector('#title').value = ""
+    document.querySelector("#editor").setAttribute('active-note', String());
   }
 
   window.addEventListener('load', _ => fetchNotes())

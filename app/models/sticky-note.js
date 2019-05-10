@@ -3,8 +3,7 @@ const Schema = mongoose.Schema;
 
 const StickyNoteSchema = new Schema({
   content: {
-    type: String,
-    required: true
+    type: String
   },
   author: {
     type: mongoose.Schema.Types.ObjectId,

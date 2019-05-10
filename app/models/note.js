@@ -18,6 +18,7 @@ const NoteSchema = new Schema({
 });
 
 NoteSchema.methods.addAuthor = function(authorId) {
+  console.log('adding this id', authorId);
   this.author = authorId;
   return this.save();
 };
