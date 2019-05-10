@@ -1,9 +1,4 @@
-<div class="columns">
-  <div class="column top-img top-img-profile top-img-main quote">
-    ...
-  </div>
-</div>
-<div class="columns">
+<div class="columns profile-container">
   <div class="column is-2">
     <aside class="menu">
       <ul class="menu-list">
@@ -14,41 +9,54 @@
 				<li><a><i class="fas fa-bullseye fa-2x"></i></a></li> --}}
         <li><a href="/reminder"><i class="far fa-bell fa-2x"></i>REMINDERS</a></li>
       </ul>
+      <button id="add-sticky" onclick="createNewSticky()"><a>Add stickey note</a></button>
     </aside>
   </div>
-  <div class="column dashboard">
-    <div id="list-wrapper">
-      <div>
-        <h2>To-Do List</h2>
+  <div class="columns top-img top-img-profile top-img-main">
+
+
+    <div class="column">
+      <div id="container">
       </div>
-      <div>
+    </div>
+    <div class="column dashboard">
+      <div id="list-wrapper">
         <div>
-          <ul id="list-container">
-          </ul>
+          <h2>To-Do List</h2>
         </div>
         <div>
-          <button onclick="createList()"><i class="fas fa-plus"></i></button>
+          <div>
+            <ul id="list-container">
+            </ul>
+          </div>
+          <div class="list-btn-wrapper">
+            <button onclick="createList()"><i class="fas fa-plus"></i></button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
-<div class="columns">
-  <div class="column">
-    <button onclick="fetchList()">TEST ME</button>
-    <form>
-      <i href="/" class="fas fa-plus"></i>
-      <input type="text">
-    </form>
-    <div id="container">
+    <div>
+      {{!-- <button id="add-sticky" onclick="createNewSticky()"><a>Add stickey note</a></button> --}}
+      {{!-- <button><a>Get inspired</a></button>
+    <button><a>Word of the day</a></button> --}}
     </div>
   </div>
-  <div>
-    <button id="add-sticky" onclick="createNewSticky()"><a>Add stickey note</a></button>
-    <button><a>Get inspired</a></button>
-    <button><a>Word of the day</a></button>
-  </div>
+
+
 </div>
+
+
+
+
+
+
+{{!-- <div class="columns">
+  <div class="column quote">
+
+  </div>
+</div> --}}
+
+
 <script>
 
   const createListItem = list => {
@@ -246,6 +254,7 @@
   const fetchQuote = async _ => {
     const { data: quote } = await axios.get('/quotes/qod');
     const quoteNote = document.querySelector('.quote');
+    console.log(quote)
     quoteNote.innerHTML = quote;
   }
   window.addEventListener('load', _ => {

@@ -25,6 +25,17 @@ a {
   font-weight: 700;
 }
 
+.auth-btn {
+  display: flex;
+  width: 20vw;
+  justify-content: center;
+}
+
+.buttons {
+  width: 100%;
+  justify-content: space-around;
+}
+
 .box {
   border: 1px solid black;
 }
@@ -41,8 +52,8 @@ a {
   background-image: url('https://images.unsplash.com/photo-1519219788971-8d9797e0928e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1928&q=80');
   font-size: 80px;
   background-size: cover;
-  width: 100%;
-  height: 80vh;
+  max-width: 100%;
+  height: 85vh;
   color: black;
   display: flex;
   justify-content: center;
@@ -76,10 +87,14 @@ a {
 }
 
 .menu {
-  height: 100vh;
+  height: 85vh;
   /* background-color: rgb(4, 30, 59); */
   /* width: 15vw; */
   /* margin-left: 10vh; */
+}
+
+.menu li {
+  padding: 6px;
 }
 
 .menu-list a {
@@ -104,7 +119,8 @@ a {
 }
 
 .top-img-profile {
-  height: 45vh;
+  height: -webkit-fill-available;
+  background-color: rgba(255, 255, 255, 0.6);
 }
 
 .top-img-auth {
@@ -114,27 +130,61 @@ a {
   justify-content: center;
 }
 
+.profile-container {
+  width: 100%;
+  height: 100%;
+}
+
+.dashboard {
+  text-align: -webkit-right;
+  margin-top: 5vh;
+  margin-right: 5vh;
+}
+
+.dashboard input {
+  width: 90%;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  font-size: inherit;
+}
+
 #list-wrapper {
-  width: 30vw;
-  height: 40vh;
+  width: 25vw;
+  height: 70vh;
   background-color: rgb(211, 211, 211, 0.6);
 }
 
 #list-wrapper h2 {
-  background-image: url('https://www.sustainableflooring.com/wp-content/uploads/2017/10/dark-grey-1710386012017.jpg');
-  height: 15vh;
+  /* background-image: url('https://www.sustainableflooring.com/wp-content/uploads/2017/10/dark-grey-1710386012017.jpg'); */
+  background-image: url('https://www.bittbox.com/wp-content/uploads/2011/09/free_high_res_texture_276.jpg');
+  height: 8vh;
   font-size: 20px;
-  color: white;
+  color: black;
   font-weight: 800;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-#list-wrapper button {
+#list-container li {
+  padding: 5px;
+}
+
+.list-btn-wrapper {
+  display: flex;
+  justify-content: center;
 }
 
 .sticky-note {
   width: 25vw;
   position: absolute;
 }
+
+/* .sticky-note textarea {
+  border: none;
+  outline: none;
+} */
 
 #editor {
   height: 80vh;
@@ -167,7 +217,6 @@ a {
   font-size: 20px;
   background-color: rgb(211, 211, 211, 0.6);
   width: 85%;
-
   margin: 0 auto;
 }
 
@@ -272,4 +321,8 @@ form {
 
 .auth-wrapper {
   text-align: right;
+}
+
+.quote {
+  font-size: 50px;
 }
