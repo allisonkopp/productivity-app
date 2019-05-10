@@ -33,31 +33,36 @@
             <button onclick="createList()"><i class="fas fa-plus"></i></button>
           </div>
         </div>
-      </div>
-    </div>
-    <div>
-      {{!-- <button id="add-sticky" onclick="createNewSticky()"><a>Add stickey note</a></button> --}}
-      {{!-- <button><a>Get inspired</a></button>
-    <button><a>Word of the day</a></button> --}}
-    </div>
-  </div>
 
+      </div>
+      {{!-- <div class="inspiration">
+        <h2>Some inspiration...</h2>
+        <p class="quote"></p>
+
+      </div> --}}
+    </div>
+
+  </div>
 
 </div>
 
-
-
-
-
-
-{{!-- <div class="columns">
-  <div class="column quote">
+{{!-- <div class="columns inspiration">
+  <div class="column">
+    <h2>Some inspiration...</h2>
+    <p class="quote"></p>
 
   </div>
 </div> --}}
 
 
+
+
+
+
+
 <script>
+
+
 
   const createListItem = list => {
     const listInput = document.createElement('input')
@@ -254,7 +259,6 @@
   const fetchQuote = async _ => {
     const { data: quote } = await axios.get('/quotes/qod');
     const quoteNote = document.querySelector('.quote');
-    console.log(quoteNote)
     quoteNote.innerHTML = quote;
   }
   window.addEventListener('load', _ => {
