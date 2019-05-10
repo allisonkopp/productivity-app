@@ -1,60 +1,73 @@
 <div class="columns">
+	<div class="column top-img top-img-profile">
+		...
+	</div>
+</div>
+<div class="columns">
 	<div class="column is-2">
 		<aside class="menu">
 			<ul class="menu-list">
-				<li><a href="/profile"><i class="fas fa-home fa-2x"></i></a></li>
-				<li><a href="/note"><i class="far fa-sticky-note fa-2x"></i></a></li>
-				<li><a><i class="far fa-calendar-alt fa-2x"></i></a></li>
+				<li><a href="/profile"><i class="fas fa-home fa-2x"></i>HOME</a></li>
+				<li><a href="/note"><i class="far fa-sticky-note fa-2x"></i>NOTES</a></li>
+				{{!-- <li><a><i class="far fa-calendar-alt fa-2x"></i></a></li>
 				<li><a><i class="fas fa-book fa-2x"></i></a></li>
-				<li><a><i class="fas fa-bullseye fa-2x"></i></a></li>
-				<li><a href="/reminder"><i class="far fa-bell fa-2x"></i></a></li>
+				<li><a><i class="fas fa-bullseye fa-2x"></i></a></li> --}}
+				<li><a href="/reminder"><i class="far fa-bell fa-2x"></i>REMINDERS</a></li>
 			</ul>
 		</aside>
 	</div>
 	<div class="column dashboard">
-		<div>
-			<button id="add-sticky" onclick="createStickyNote()"><a>Add stickey note</a></button>
-			<button><a>Get inspired</a></button>
-			<button><a>Word of the day</a></button>
+
+		<div id="list-wrapper">
+
+			<div>
+				<h2>To-Do List</h2>
+			</div>
+			<div>
+				<div>
+					<ul id="list-container">
+					</ul>
+				</div>
+				<div>
+					<button onclick="addListItem()"><i class="fas fa-plus"></i></button>
+				</div>
+			</div>
 		</div>
 
-		<div class="box">
-			<h2>To-Do List</h2>
-			<ul id="list-container">
+	</div>
+</div>
+<div class="columns">
 
-				{{!-- {{#each listItems}}
-					<li>
-						<form><i class="far fa-circle"></i>{{item}}</form>
-					</li>
-					{{/each}} --}}
-			</ul>
-			<button onclick="addListItem()"><i class="fas fa-plus"></i></button>
-		</div>
-
+	<div class="column">
 		<button onclick="fetchList()">TEST ME</button>
-
-
 		<form>
 			<i href="/" class="fas fa-plus"></i>
 			<input type="text">
 		</form>
-
-
-
-
 		<div id="container">
 			 {{#each items}}
 			{{> stickyPartial}}
 			{{/each}} 
-
 		</div>
 	</div>
+	<div>
+		<button id="add-sticky" onclick="createStickyNote()"><a>Add stickey note</a></button>
+		<button><a>Get inspired</a></button>
+		<button><a>Word of the day</a></button>
+	</div>
+
 </div>
+
+
+
+
 
 <script>
 
-	axios.get('http://api.forismatic.com/api/1.0/')
-		.then(data => console.log(data))
+
+
+
+
 
 
 

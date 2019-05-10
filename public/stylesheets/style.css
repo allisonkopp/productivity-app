@@ -29,6 +29,9 @@ a {
   border: 1px solid black;
 }
 
+/* #main-container {
+  height: 100vh;
+} */
 /* div {
   border: 1px solid red;
 } */
@@ -47,18 +50,47 @@ a {
 
 .menu {
   height: 100vh;
-  background-color: rgb(4, 30, 59r4);
+  /* background-color: rgb(4, 30, 59); */
   /* width: 15vw; */
   /* margin-left: 10vh; */
 }
 
 .menu-list a {
   text-decoration: none;
-  text-align: center;
+  text-align: left;
 }
 
-.dashboard {
-  background-color: gray;
+.top-img {
+  background-color: rgb(211, 211, 211, 0.6);
+  /* background-image: url('https://iapwe.org/wp-content/uploads/2016/08/Writing.png');  */
+  /* background-image: url('https://images.unsplash.com/photo-1493934558415-9d19f0b2b4d2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1636&q=80'); */
+  background-image: url('https://images.unsplash.com/photo-1470584295511-0ac600a63e86?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1955&q=80');
+  /* background-position: center top; */
+  background-size: cover;
+  background-position: right;
+  width: 100%;
+  background-repeat: no-repeat;
+}
+
+.top-img-profile {
+  height: 45vh;
+}
+
+#list-wrapper {
+  width: 30vw;
+  height: 40vh;
+  background-color: rgb(211, 211, 211, 0.6);
+}
+
+#list-wrapper h2 {
+  background-image: url('https://www.sustainableflooring.com/wp-content/uploads/2017/10/dark-grey-1710386012017.jpg');
+  height: 15vh;
+  font-size: 20px;
+  color: white;
+  font-weight: 800;
+}
+
+#list-wrapper button {
 }
 
 .sticky-note {
@@ -68,11 +100,11 @@ a {
 
 #editor {
   height: 80vh;
-  /* opacity: 1; */
 }
 
 #editor-wrapper {
-  background-image: url('https://i.pinimg.com/originals/d5/16/17/d51617f09a01efe3333db16572bc9b7c.jpg');
+  /* background-image: url('https://i.pinimg.com/originals/d5/16/17/d51617f09a01efe3333db16572bc9b7c.jpg'); */
+  background-image: url('https://images.unsplash.com/photo-1532348374062-fee19177e98f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80');
   background-size: cover;
   justify-content: center;
 }
@@ -142,4 +174,45 @@ a {
 
 form {
   display: inline;
+}
+
+#account-container i {
+  font-size: 5em;
+}
+
+.card-info {
+  border: 3px solid black;
+  height: 35vh;
+  margin: 4vh 2vw;
+}
+
+.card-info-main {
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.card-info-main h2 {
+  text-align: center;
+  padding-bottom: 5vh;
+  font-size: large;
+}
+
+.card-contents {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: center;
+}
+
+.card-contents-main {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  height: 100%;
+  justify-content: center;
+}
+
+.card-contents-main a {
+  text-align: center;
 }

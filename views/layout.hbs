@@ -16,47 +16,55 @@
 </head>
 
 <body>
-    <nav class="navbar" role="navigation" aria-label="main navigation">
-        <div class="navbar-brand">
-            <h2><a href="/">THRIVE</a></h2>
-            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-            </a>
-        </div>
-        <div class="navbar-menu">
+    <div id="main-container">
 
-            <div class="navbar-end ">
-                {{#if user}}
-                {{!-- <a href='/profile'>Home</a> --}}
-                <div class="navbar-item has-dropdown is-hoverable">
-                    <a class="navbar-link">
-                        More
-                    </a>
-                    <div class="navbar-dropdown">
-                        <a class="navbar-item" href="/account">
-                            Account
-                        </a>
-                        <a class="navbar-item" href="/logout">
-                            Logout
-                        </a>
-                    </div>
-                </div>
-                {{else}}
-                <div class="navbar-item">
-                    <div class="buttons">
-                        <a href="/login"></span>Login</a>
-                        <a href="/signup"></span> Signup</a>
-                    </div>
-                </div>
-                {{/if}}
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
+                <h2><a href="/">THRIVE</a></h2>
+                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
             </div>
-        </div>
+            <div class="navbar-menu">
 
-    </nav>
+                <div class="navbar-end ">
+                    {{#if user}}
+                    {{!-- <a href='/profile'>Home</a> --}}
+                    <div class="navbar-item has-dropdown is-hoverable">
+                        <a class="navbar-link">
+                            More
+                        </a>
+                        <div class="navbar-dropdown">
+                            <a class="navbar-item" href="/profile">
+                                Dashbaord
+                            </a>
+                            <a class="navbar-item" href="/account">
+                                Account
+                            </a>
+                            <a class="navbar-item" href="/logout">
+                                Logout
+                            </a>
+                        </div>
+                    </div>
+                    {{else}}
+                    <div class="navbar-item">
+                        <div class="buttons">
+                            <a href="/login"></span>Login</a>
+                            <a href="/signup"></span> Signup</a>
+                        </div>
+                    </div>
+                    {{/if}}
+                </div>
+            </div>
 
-    {{{body}}}
+        </nav>
+
+        {{{body}}}
+    </div>
+
+
 
     <script src="./javascripts/script.js"></script>
     <script src="./javascripts/utils.js"></script>

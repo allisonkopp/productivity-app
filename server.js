@@ -10,6 +10,11 @@ require('dotenv').config();
 const unirest = require('unirest');
 const cors = require('cors');
 
+// const quoteApi = new unirest({
+//   quoteAPIHost: process.env.quoteAPIHost,
+//   quoteAPIKey: process.env.quoteAPIKey
+// });
+
 const noteRoutes = require('./app/router/note');
 const stickyNoteRoutes = require('./app/router/sticky-notes');
 const listRoutes = require('./app/router/list');

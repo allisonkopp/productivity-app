@@ -1,88 +1,101 @@
-<div>
+<div id="account-container">
+    <div class="columns top-img">
+        <div class="column is-three-fifths is-offset-one-fifth">
+            <div class="card card-info card-info-main">
 
-    <!-- LOCAL INFORMATION -->
-    <div>
-        <div>
-            <h3><span class="fa fa-user"></span> Local</h3>
+                <div class="card-contents-main">
+                    <h2><b>Account Information</b></h2>
+                    {{#if user.local.email }}
+                    <p>
+                        <strong>id</strong>: {{ user._id }}<br>
+                        <strong>email</strong>:{{ user.local.email }}<br>
+                        {{!-- <strong>password</strong>: {{ user.local.password }} --}}
+                        <strong>password</strong>: [hidden]
+                    </p>
+                    <a href="/unlink/local"><b><br />Unlink</b></a>
+                    {{else}}
+                    <a href="/connect/local">Connect Local</a>
+                    {{/if}}
 
-            {{#if user.local.email }}
-            <p>
-                <strong>id</strong>: {{ user._id }}<br>
-                <strong>email</strong>:{{ user.local.email }}<br>
-                <strong>password</strong>: {{ user.local.password }}
-            </p>
+                </div>
 
-            <a href="/unlink/local" class="btn btn-default">Unlink</a>
-            {{else}}
-            <a href="/connect/local" class="btn btn-default">Connect Local</a>
-            {{/if}}
 
-        </div>
-    </div>
-
-    <!-- FACEBOOK INFORMATION -->
-    <div class="col-sm-6">
-        <div class="well">
-            <h3 class="text-primary"><span class="fa fa-facebook"></span> Facebook</h3>
-
-            <!-- check if the user has this token (is the user authenticated with this social account) -->
-            {{#if user.facebook.token }}
-            <p>
-                <strong>id</strong>: {{ user.facebook.id }}<br>
-                <strong>token</strong>: {{ user.facebook.token }}<br>
-                <strong>email</strong>: {{ user.facebook.email }}<br>
-                <strong>name</strong>: {{ user.facebook.name }}<br>
-            </p>
-
-            <a href="/unlink/facebook" class="btn btn-primary">Unlink</a>
-            {{else}}
-            <a href="/connect/facebook" class="btn btn-primary">Connect Facebook</a>
-            {{/if}}
+            </div>
 
         </div>
     </div>
-</div>
-<div class="row">
+    <div class="columns">
+        <div class="column">
+            <div class="card card-info">
+                <div class="card-contents">
 
-    <!-- TWITTER INFORMATION -->
-    <div class="col-sm-6">
-        <div class="well">
-            <h3 class="text-info"><span class="fa fa-twitter"></span> Twitter</h3>
+                    <i class="fab fa-facebook"></i>
 
-            {{#if user.twitter.token }}
-            <p>
-                <strong>id</strong>: {{ user.twitter.id }}<br>
-                <strong>token</strong>: {{ user.twitter.token }}<br>
-                <strong>email</strong>: {{ user.twitter.email }}<br>
-                <strong>name</strong>: {{ user.twitter.name }}<br>
-            </p>
+                    {{#if user.facebook.token }}
+                    <p>
+                        <strong>id</strong>: {{ user.facebook.id }}<br>
+                        <strong>token</strong>: {{ user.facebook.token }}<br>
+                        <strong>email</strong>: {{ user.facebook.email }}<br>
+                        <strong>name</strong>: {{ user.facebook.name }}<br>
+                    </p>
+                    <a href="/unlink/facebook">Unlink</a>
+                    {{else}}
+                    <a href="/connect/facebook">Facebook<br />Connect</a>
+                    {{/if}}
+                </div>
 
-            <a href="/unlink/twitter" class="btn btn-primary">Unlink</a>
-            {{else}}
-            <a href="/connect/twitter" class="btn btn-primary">Connect Twitter</a>
-            {{/if}}
+            </div>
+        </div>
+
+
+
+        <div class="column">
+            <div class="card card-info">
+                <div class="card-contents">
+
+                    <i class="fab fa-twitter"></i>
+
+                    {{#if user.twitter.token }}
+                    <p>
+                        <strong>id</strong>: {{ user.twitter.id }}<br>
+                        <strong>token</strong>: {{ user.twitter.token }}<br>
+                        <strong>email</strong>: {{ user.twitter.email }}<br>
+                        <strong>name</strong>: {{ user.twitter.name }}<br>
+                    </p>
+                    <a href="/unlink/twitter">Unlink</a>
+                    {{else}}
+                    <a href="/connect/twitter">Twitter<br />Connect</a>
+                    {{/if}}
+
+                </div>
+            </div>
 
         </div>
-    </div>
 
-    <!-- GOOGLE INFORMATION -->
-    <div class="col-sm-6">
-        <div class="well">
-            <h3 class="text-danger"><span class="fa fa-google-plus"></span> Google+</h3>
 
-            {{#if user.google.token }}
-            <p>
-                <strong>id</strong>: {{ user.google.id }}<br>
-                <strong>token</strong>: {{ user.google.token }}<br>
-                <strong>email</strong>: {{ user.google.email }}<br>
-                <strong>name</strong>: {{ user.google.name }}<br>
-            </p>
+        <div class="column">
+            <div class="card card-info">
+                <div class="card-contents">
+                    <i class="fab fa-google-plus"></i>
 
-            <a href="/unlink/google" class="btn btn-primary">Unlink</a>
-            {{else}}
-            <a href="/connect/google" class="btn btn-primary">Connect Google</a>
-            {{/if}}
+                    {{#if user.google.token }}
+                    <p>
+                        <strong>id</strong>: {{ user.google.id }}<br>
+                        <strong>token</strong>: {{ user.google.token }}<br>
+                        <strong>email</strong>: {{ user.google.email }}<br>
+                        <strong>name</strong>: {{ user.google.name }}<br>
+                    </p>
+
+                    <a href="/unlink/google">Unlink</a>
+                    {{else}}
+                    <a href="/connect/google">Google<br />Connect</a>
+                    {{/if}}
+
+                </div>
+
+            </div>
 
         </div>
+
     </div>
 </div>
